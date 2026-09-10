@@ -7,7 +7,7 @@ import Highlight from './Highlight.jsx';
 
 const SLIDES = [
   {
-    image: 'https://placehold.co/1920x900/e8ddd0/e8ddd0',
+    image: 'https://images.unsplash.com/photo-1528567656495-d439e32f6be1?w=1920&h=900&fit=crop&auto=format&q=80',
     heading: (
       <>
         Little clothes.
@@ -20,14 +20,14 @@ const SLIDES = [
     href: '/shop',
   },
   {
-    image: 'https://placehold.co/1920x900/ded2c2/ded2c2',
+    image: 'https://images.unsplash.com/photo-1582212742497-86a2c4495267?w=1920&h=900&fit=crop&auto=format&q=80',
     heading: 'Newborn essentials, from day one.',
     text: "Soft, gentle fabrics for your baby's first weeks.",
     cta: 'Shop Newborn',
     href: '/shop?category=newborn-essentials',
   },
   {
-    image: 'https://placehold.co/1920x900/e3d7c8/e3d7c8',
+    image: 'https://images.unsplash.com/photo-1522771930-78848d9293e8?w=1920&h=900&fit=crop&auto=format&q=80',
     heading: 'Sleepwear that feels like a hug.',
     text: 'Cosy, breathable, and built for real bedtimes.',
     cta: 'Shop Sleepwear',

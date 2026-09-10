@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom';
 
 const PANELS = [
   {
-    image: 'https://placehold.co/950x900/ece3d6/ece3d6',
+    image: 'https://images.unsplash.com/photo-1503284116362-30c49f508156?w=950&h=900&fit=crop&auto=format&q=80',
     heading: 'Everyday Wear',
     subheading: 'Play-ready essentials',
     href: '/shop?category=onesies-rompers',
   },
   {
-    image: 'https://placehold.co/950x900/dfd3c3/dfd3c3',
+    image: 'https://images.unsplash.com/photo-1538569582413-c34b58b1ab3f?w=950&h=900&fit=crop&auto=format&q=80',
     heading: 'Nap Time',
     subheading: 'Soft, breathable sleepwear',
     href: '/shop?category=sleepwear',

@@ -7,7 +7,7 @@ function BrandMoment() {
   return (
     <section className="relative h-[420px] md:h-[520px] overflow-hidden">
       <img
-        src="https://placehold.co/1900x800/dcd0c4/dcd0c4"
+        src="https://images.unsplash.com/photo-1763679324923-b856ca6a355d?w=1900&h=800&fit=crop&auto=format&q=80"
         alt=""
         className="h-full w-full object-cover"
       />
