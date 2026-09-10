@@ -128,12 +128,7 @@ function Navbar() {
       <AnnouncementBar />
       <nav className="bg-background/95 backdrop-blur-sm border-b border-border transition-colors">
       <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12">
-        <div className="flex items-center justify-between py-6 lg:py-8">
-          {/* Logo */}
-          <Link to="/" className="font-heading text-2xl text-foreground tracking-tight">
-            LittleNest
-          </Link>
-
+        <div className="flex md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center justify-between gap-4 py-6 lg:py-8">
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-8">
             <div className="relative" ref={shopMenuRef}>
@@ -194,8 +189,16 @@ function Navbar() {
             ))}
           </div>
 
+          {/* Logo */}
+          <Link
+            to="/"
+            className="order-1 md:order-none font-heading text-2xl text-foreground tracking-tight text-center"
+          >
+            LittleNest
+          </Link>
+
           {/* Right Actions */}
-          <div className="flex items-center gap-3">
+          <div className="order-2 md:order-none flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => setSearchOpen(true)}

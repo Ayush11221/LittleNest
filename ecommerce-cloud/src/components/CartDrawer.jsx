@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Minus, Plus } from 'lucide-react';
 import Drawer from './ui/drawer.jsx';
 import { Button } from './ui/button.jsx';
@@ -21,6 +21,12 @@ function LineSkeleton() {
 function CartDrawer({ open, onClose }) {
   const { lines, loading, error, retry, updateQuantity, removeFromCart } = useCartLines();
   const subtotal = calculateSubtotal(lines);
+  const navigate = useNavigate();
+
+  const goToCheckout = () => {
+    onClose();
+    navigate('/checkout');
+  };
 
   return (
     <Drawer
@@ -37,7 +43,7 @@ function CartDrawer({ open, onClose }) {
             <p className="text-xs text-muted-foreground mb-4">
               Shipping and tax calculated at checkout.
             </p>
-            <Button size="lg" className="w-full">
+            <Button size="lg" className="w-full" onClick={goToCheckout}>
               Checkout
             </Button>
             <Link
