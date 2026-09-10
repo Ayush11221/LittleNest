@@ -4,8 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Cloud E-Commerce - Modern online shopping experience" />
-    <title>Cloud E-Commerce</title>
+    <meta name="description" content="LittleNest — Thoughtfully made baby clothing essentials. Soft fabrics, everyday comfort, and little details that matter." />
+    <title>LittleNest — Baby Clothing</title>
+    <script>
+      // Prevent dark-mode flash: apply theme class before React hydrates
+      (function() {
+        var theme = localStorage.getItem('littlenest-theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

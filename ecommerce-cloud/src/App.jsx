@@ -5,11 +5,13 @@ import Home from './pages/Home.jsx';
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navbar />
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* Phase 3: <Route path="/shop" element={<Products />} /> */}
+          {/* Phase 3: <Route path="/products/:slug" element={<ProductDetails />} /> */}
         </Routes>
       </main>
       <Footer />
