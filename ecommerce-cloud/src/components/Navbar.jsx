@@ -1,14 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, User, Search, Sun, Moon, Menu, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { useCart } from '../context/CartContext.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { AnimatePresence, motion } from 'motion/react';
 
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { itemCount } = useCart();
+  const { user, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
+  const accountRef = useRef(null);
+
+  useEffect(() => {
+    if (!accountOpen) return;
+    const handleClickOutside = (event) => {
+      if (!accountRef.current?.contains(event.target)) setAccountOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [accountOpen]);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setAccountOpen(false);
+    setMobileOpen(false);
+  };
 
   const navLinks = [
     { label: 'Shop', to: '/shop' },
@@ -62,13 +81,49 @@ function Navbar() {
               )}
             </Link>
 
-            <Link
-              to="/login"
-              className="hidden sm:block p-2 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Account"
-            >
-              <User className="h-5 w-5" />
-            </Link>
+            {user ? (
+              <div className="hidden sm:block relative" ref={accountRef}>
+                <button
+                  onClick={() => setAccountOpen(!accountOpen)}
+                  aria-expanded={accountOpen}
+                  aria-label="Account menu"
+                  className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <User className="h-5 w-5" />
+                </button>
+
+                <AnimatePresence>
+                  {accountOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.15, ease: 'easeOut' }}
+                      className="absolute right-0 mt-2 w-56 rounded-md border border-border bg-background py-1"
+                    >
+                      <p className="px-3 py-2 border-b border-border text-xs text-muted-foreground truncate">
+                        Signed in as{' '}
+                        <span className="text-foreground">{user.email}</span>
+                      </p>
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        Sign out
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden sm:block p-2 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Account"
+              >
+                <User className="h-5 w-5" />
+              </Link>
+            )}
 
             <button
               onClick={toggleTheme}
@@ -119,13 +174,27 @@ function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                to="/login"
-                onClick={() => setMobileOpen(false)}
-                className="block text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide py-2 transition-colors"
-              >
-                Account
-              </Link>
+              {user ? (
+                <div className="pt-2 border-t border-border">
+                  <p className="text-xs text-muted-foreground py-2 truncate">
+                    Signed in as <span className="text-foreground">{user.email}</span>
+                  </p>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide py-2 transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide py-2 transition-colors"
+                >
+                  Account
+                </Link>
+              )}
             </div>
           </motion.div>
         )}
