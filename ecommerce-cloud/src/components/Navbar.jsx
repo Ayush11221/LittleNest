@@ -31,8 +31,8 @@ function Navbar() {
 
   const navLinks = [
     { label: 'Shop', to: '/shop' },
-    { label: 'Collections', to: '#' },
-    { label: 'About', to: '#' },
+    { label: 'Collections', to: '/shop' },
+    { label: 'About', to: '/about' },
   ];
 
   return (
@@ -59,16 +59,17 @@ function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            <button
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Search"
+            <Link
+              to="/shop"
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              aria-label="Search products"
             >
               <Search className="h-5 w-5" />
-            </button>
+            </Link>
 
             <Link
               to="/cart"
-              className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               aria-label={
                 itemCount > 0 ? `Shopping bag, ${itemCount} items` : 'Shopping bag'
               }
@@ -87,7 +88,7 @@ function Navbar() {
                   onClick={() => setAccountOpen(!accountOpen)}
                   aria-expanded={accountOpen}
                   aria-label="Account menu"
-                  className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 >
                   <User className="h-5 w-5" />
                 </button>
@@ -118,7 +119,7 @@ function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="hidden sm:block p-2 text-muted-foreground hover:text-foreground transition-colors"
+                className="hidden sm:block p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 aria-label="Account"
               >
                 <User className="h-5 w-5" />
@@ -127,7 +128,7 @@ function Navbar() {
 
             <button
               onClick={toggleTheme}
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
             >
               {theme === 'light' ? (
@@ -140,7 +141,7 @@ function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="md:hidden p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
               {mobileOpen ? (

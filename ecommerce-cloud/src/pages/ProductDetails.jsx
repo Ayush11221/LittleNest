@@ -1,11 +1,34 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Minus, Plus } from 'lucide-react';
+import { Minus, Plus, Star } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Button } from '../components/ui/button.jsx';
 import { formatCurrency } from '../utils/formatCurrency.js';
 import { fetchProductBySlug } from '../services/productService.js';
 import { useCart } from '../context/CartContext.jsx';
+
+/** Read-only 5-star rating, rounded to the nearest half star. Hidden when there's no rating yet. */
+function RatingStars({ rating }) {
+  if (!rating) return null;
+  const rounded = Math.round(rating * 2) / 2;
+
+  return (
+    <div
+      className="flex items-center gap-0.5 text-primary"
+      role="img"
+      aria-label={`Rated ${rating} out of 5`}
+    >
+      {[1, 2, 3, 4, 5].map((i) => (
+        <Star
+          key={i}
+          className="h-4 w-4"
+          fill={i <= rounded ? 'currentColor' : 'none'}
+          strokeWidth={1.5}
+        />
+      ))}
+    </div>
+  );
+}
 
 function DetailSkeleton() {
   return (
@@ -290,6 +313,10 @@ function ProductDetails() {
           <h1 className="font-heading text-3xl md:text-4xl text-foreground">
             {product.name}
           </h1>
+
+          <div className="mt-2">
+            <RatingStars rating={product.rating} />
+          </div>
 
           <div className="mt-3 flex items-center gap-3">
             <span className="text-xl font-semibold text-foreground">

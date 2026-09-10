@@ -4,6 +4,11 @@ import { motion } from 'motion/react';
 import { Heart, RotateCcw, ShieldCheck, Baby, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/button.jsx';
 import ProductCard from '../components/ProductCard.jsx';
+import CategoryCollage from '../components/CategoryCollage.jsx';
+import Lookbook from '../components/Lookbook.jsx';
+import Testimonials from '../components/Testimonials.jsx';
+import Faq from '../components/Faq.jsx';
+import Highlight from '../components/Highlight.jsx';
 import { fetchNewArrivals } from '../services/productService.js';
 
 /* Seed-data categories for "Shop by Category" */
@@ -86,7 +91,7 @@ function Home() {
               <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight">
                 Little clothes.
                 <br />
-                Big moments.
+                Big <Highlight>moments</Highlight>.
               </h1>
               <p className="mt-5 text-muted-foreground text-lg md:text-xl max-w-lg leading-relaxed">
                 Thoughtfully made essentials for your little one's everyday
@@ -159,31 +164,18 @@ function Home() {
             </div>
           </Reveal>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-5">
-            {categories.map((cat) => (
-              <Reveal key={cat.slug}>
-                <Link
-                  to={`/shop?category=${cat.slug}`}
-                  className="group block rounded-lg border border-border bg-card overflow-hidden hover:border-primary/30 hover:shadow-sm transition-all"
-                >
-                  {/* Image area */}
-                  <div className="aspect-[16/9] bg-muted overflow-hidden">
-                    <img
-                      src={`https://placehold.co/480x270/f5f0eb/4a4a4a?text=${encodeURIComponent(cat.name)}`}
-                      alt={cat.name}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                    />
-                  </div>
-                  {/* Name */}
-                  <div className="px-4 py-3">
-                    <span className="font-heading text-base text-foreground group-hover:text-primary transition-colors">
-                      {cat.name}
-                    </span>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
+          <Reveal>
+            <CategoryCollage categories={categories} />
+          </Reveal>
+
+          <div className="mt-8 text-center">
+            <Link
+              to="/shop"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            >
+              Shop all categories
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -258,6 +250,11 @@ function Home() {
       </section>
 
       {/* =====================================================
+          LOOKBOOK — shoppable lifestyle image
+          ===================================================== */}
+      {!loadingProducts && <Lookbook products={newArrivals} />}
+
+      {/* =====================================================
           BRAND STORY
           ===================================================== */}
       <section className="bg-accent/20 border-t border-border">
@@ -299,6 +296,16 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* =====================================================
+          TESTIMONIALS
+          ===================================================== */}
+      <Testimonials />
+
+      {/* =====================================================
+          FAQ
+          ===================================================== */}
+      <Faq />
 
       {/* =====================================================
           NEWSLETTER

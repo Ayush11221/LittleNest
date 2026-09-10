@@ -1,13 +1,27 @@
 import { supabase } from '../lib/supabaseClient.js';
 
 /**
+ * Derives a simple `in_stock` flag from a product's nested variant rows
+ * and drops the raw variant array — list views only need the flag, not
+ * full variant data (that's fetched separately on the product page).
+ */
+function withStockFlag(product) {
+  const variants = product.product_variants || [];
+  const in_stock = variants.some((v) => v.is_active && v.stock > 0);
+  const { product_variants, ...rest } = product;
+  return { ...rest, in_stock };
+}
+
+/**
  * Fetch featured / newest products for the homepage.
  * Returns up to `limit` active products ordered by newest first.
  */
 export async function fetchNewArrivals(limit = 4) {
   const { data, error } = await supabase
     .from('products')
-    .select('id, name, slug, price, compare_at_price, image_url, rating, age_group')
+    .select(
+      'id, name, slug, price, compare_at_price, image_url, rating, age_group, product_variants(stock, is_active)'
+    )
     .eq('is_active', true)
     .order('created_at', { ascending: false })
     .limit(limit);
@@ -17,7 +31,7 @@ export async function fetchNewArrivals(limit = 4) {
     return [];
   }
 
-  return data || [];
+  return (data || []).map(withStockFlag);
 }
 
 /**
@@ -73,7 +87,9 @@ export async function fetchProducts({
 } = {}) {
   let query = supabase
     .from('products')
-    .select('id, name, slug, price, compare_at_price, image_url, rating, age_group, category_id')
+    .select(
+      'id, name, slug, price, compare_at_price, image_url, rating, age_group, category_id, product_variants(stock, is_active)'
+    )
     .eq('is_active', true);
 
   if (search.trim()) {
@@ -110,7 +126,7 @@ export async function fetchProducts({
     console.error('Error fetching products:', error.message);
   }
 
-  return { data: data || [], error };
+  return { data: (data || []).map(withStockFlag), error };
 }
 
 /**
