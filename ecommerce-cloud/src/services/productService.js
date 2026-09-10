@@ -121,6 +121,8 @@ export async function fetchProducts({
   search = '',
   categoryId = null,
   ageGroup = null,
+  minPrice = null,
+  maxPrice = null,
   sort = 'newest',
 } = {}) {
   let query = supabase
@@ -140,6 +142,14 @@ export async function fetchProducts({
 
   if (ageGroup) {
     query = query.eq('age_group', ageGroup);
+  }
+
+  if (minPrice != null) {
+    query = query.gte('price', minPrice);
+  }
+
+  if (maxPrice != null) {
+    query = query.lte('price', maxPrice);
   }
 
   switch (sort) {
@@ -190,6 +200,83 @@ export async function fetchProductBySlug(slug) {
   }
 
   return { data: data || null, error };
+}
+
+/**
+ * Fetch active products by id, in no particular guaranteed order —
+ * used to hydrate the wishlist and "recently viewed" lists (which
+ * store ids only) with live prices, images, and stock.
+ */
+export async function fetchProductsByIds(ids) {
+  if (!ids || ids.length === 0) return [];
+
+  const { data, error } = await supabase
+    .from('products')
+    .select(
+      'id, name, slug, price, compare_at_price, image_url, rating, age_group, product_variants(stock, is_active)'
+    )
+    .eq('is_active', true)
+    .in('id', ids);
+
+  if (error) {
+    console.error('Error fetching products by id:', error.message);
+    return [];
+  }
+
+  return (data || []).map(withStockFlag);
+}
+
+/**
+ * Fetch other active products from the same category — "You may also
+ * like" on the product details page. Excludes the product being viewed.
+ */
+export async function fetchRelatedProducts(categoryId, excludeProductId, limit = 4) {
+  if (!categoryId) return [];
+
+  let query = supabase
+    .from('products')
+    .select(
+      'id, name, slug, price, compare_at_price, image_url, rating, age_group, product_variants(stock, is_active)'
+    )
+    .eq('is_active', true)
+    .eq('category_id', categoryId)
+    .limit(limit);
+
+  if (excludeProductId) {
+    query = query.neq('id', excludeProductId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error('Error fetching related products:', error.message);
+    return [];
+  }
+
+  return (data || []).map(withStockFlag);
+}
+
+/**
+ * Lightweight product search for the navbar's instant-search overlay —
+ * a handful of name matches, not the full filtered/sorted shop query.
+ */
+export async function searchProducts(term, limit = 5) {
+  const trimmed = term.trim();
+  if (!trimmed) return [];
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('id, name, slug, price, image_url')
+    .eq('is_active', true)
+    .ilike('name', `%${trimmed}%`)
+    .limit(limit);
+
+  if (error) {
+    console.error('Error searching products:', error.message);
+    return [];
+  }
+
+  return data || [];
 }
 
 /**

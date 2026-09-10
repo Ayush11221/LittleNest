@@ -1,10 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, User, Search, Sun, Moon, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  ShoppingBag,
+  User,
+  Search,
+  Sun,
+  Moon,
+  Menu,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
+  Heart,
+} from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useWishlist } from '../context/WishlistContext.jsx';
 import { AnimatePresence, motion } from 'motion/react';
+import CartDrawer from './CartDrawer.jsx';
+import SearchOverlay from './SearchOverlay.jsx';
+import { fetchCategories } from '../services/productService.js';
 
 const ANNOUNCEMENTS = [
   'Free shipping on orders over ₹1,999',
@@ -66,11 +82,20 @@ function AnnouncementBar() {
 
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const { itemCount } = useCart();
+  const { itemCount, isDrawerOpen, openDrawer, closeDrawer } = useCart();
   const { user, signOut } = useAuth();
+  const { productIds: wishlistIds } = useWishlist();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [shopMenuOpen, setShopMenuOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
   const accountRef = useRef(null);
+  const shopMenuRef = useRef(null);
+
+  useEffect(() => {
+    fetchCategories().then(setCategories);
+  }, []);
 
   useEffect(() => {
     if (!accountOpen) return;
@@ -81,17 +106,22 @@ function Navbar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [accountOpen]);
 
+  useEffect(() => {
+    if (!shopMenuOpen) return;
+    const handleClickOutside = (event) => {
+      if (!shopMenuRef.current?.contains(event.target)) setShopMenuOpen(false);
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [shopMenuOpen]);
+
   const handleSignOut = async () => {
     await signOut();
     setAccountOpen(false);
     setMobileOpen(false);
   };
 
-  const navLinks = [
-    { label: 'Shop', to: '/shop' },
-    { label: 'Collections', to: '/shop' },
-    { label: 'About', to: '/about' },
-  ];
+  const navLinks = [{ label: 'About', to: '/about' }];
 
   return (
     <div className="sticky top-0 z-50">
@@ -106,6 +136,52 @@ function Navbar() {
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-8">
+            <div className="relative" ref={shopMenuRef}>
+              <button
+                type="button"
+                onClick={() => setShopMenuOpen((open) => !open)}
+                aria-expanded={shopMenuOpen}
+                className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide transition-colors py-1"
+              >
+                Shop
+                <ChevronDown
+                  className={`h-3.5 w-3.5 transition-transform ${shopMenuOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              <AnimatePresence>
+                {shopMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.15, ease: 'easeOut' }}
+                    className="absolute left-0 mt-3 w-64 rounded-2xl border border-border bg-background shadow-soft p-4"
+                  >
+                    <Link
+                      to="/shop"
+                      onClick={() => setShopMenuOpen(false)}
+                      className="block px-2 py-1.5 rounded-lg text-sm font-medium text-foreground hover:bg-muted transition-colors"
+                    >
+                      Shop All
+                    </Link>
+                    <div className="mt-1 grid grid-cols-1 gap-0.5">
+                      {categories.map((cat) => (
+                        <Link
+                          key={cat.id}
+                          to={`/shop?category=${cat.slug}`}
+                          onClick={() => setShopMenuOpen(false)}
+                          className="px-2 py-1.5 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                        >
+                          {cat.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {navLinks.map((link) => (
               <Link
                 key={link.label}
@@ -120,16 +196,33 @@ function Navbar() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            <Link
-              to="/shop"
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
               className="p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               aria-label="Search products"
             >
               <Search className="h-5 w-5" />
-            </Link>
+            </button>
 
             <Link
-              to="/cart"
+              to="/wishlist"
+              className="relative hidden sm:block p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              aria-label={
+                wishlistIds.length > 0 ? `Wishlist, ${wishlistIds.length} items` : 'Wishlist'
+              }
+            >
+              <Heart className="h-5 w-5" />
+              {wishlistIds.length > 0 && (
+                <span className="absolute top-0.5 right-0.5 h-4 min-w-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-medium flex items-center justify-center">
+                  {wishlistIds.length > 99 ? '99+' : wishlistIds.length}
+                </span>
+              )}
+            </Link>
+
+            <button
+              type="button"
+              onClick={openDrawer}
               className="relative p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               aria-label={
                 itemCount > 0 ? `Shopping bag, ${itemCount} items` : 'Shopping bag'
@@ -141,7 +234,7 @@ function Navbar() {
                   {itemCount > 99 ? '99+' : itemCount}
                 </span>
               )}
-            </Link>
+            </button>
 
             {user ? (
               <div className="hidden sm:block relative" ref={accountRef}>
@@ -226,6 +319,23 @@ function Navbar() {
             className="md:hidden overflow-hidden border-t border-border bg-background"
           >
             <div className="px-4 py-4 space-y-3">
+              <Link
+                to="/shop"
+                onClick={() => setMobileOpen(false)}
+                className="block text-foreground text-sm font-medium tracking-wide py-2 transition-colors"
+              >
+                Shop All
+              </Link>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={`/shop?category=${cat.slug}`}
+                  onClick={() => setMobileOpen(false)}
+                  className="block pl-3 text-muted-foreground hover:text-foreground text-sm py-1.5 transition-colors"
+                >
+                  {cat.name}
+                </Link>
+              ))}
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -236,6 +346,13 @@ function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                to="/wishlist"
+                onClick={() => setMobileOpen(false)}
+                className="block text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide py-2 transition-colors"
+              >
+                Wishlist{wishlistIds.length > 0 ? ` (${wishlistIds.length})` : ''}
+              </Link>
               {user ? (
                 <div className="pt-2 border-t border-border">
                   <p className="text-xs text-muted-foreground py-2 truncate">
@@ -262,6 +379,8 @@ function Navbar() {
         )}
       </AnimatePresence>
       </nav>
+      <CartDrawer open={isDrawerOpen} onClose={closeDrawer} />
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }

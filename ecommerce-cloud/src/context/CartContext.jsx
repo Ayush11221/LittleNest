@@ -31,6 +31,7 @@ function readStoredCart() {
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState(readStoredCart);
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -80,6 +81,9 @@ export function CartProvider({ children }) {
 
   const clearCart = () => setItems([]);
 
+  const openDrawer = () => setDrawerOpen(true);
+  const closeDrawer = () => setDrawerOpen(false);
+
   const itemCount = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
     [items]
@@ -95,6 +99,9 @@ export function CartProvider({ children }) {
         removeFromCart,
         removeUnavailable,
         clearCart,
+        isDrawerOpen,
+        openDrawer,
+        closeDrawer,
       }}
     >
       {children}

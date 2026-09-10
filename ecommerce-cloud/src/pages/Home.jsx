@@ -13,6 +13,11 @@ import ScrollingText from '../components/ScrollingText.jsx';
 import FeaturedProduct from '../components/FeaturedProduct.jsx';
 import ShopTheEdit from '../components/ShopTheEdit.jsx';
 import BestSellers from '../components/BestSellers.jsx';
+import BrandMoment from '../components/BrandMoment.jsx';
+import ImageComparison from '../components/ImageComparison.jsx';
+import BuildYourSet from '../components/BuildYourSet.jsx';
+import Journal from '../components/Journal.jsx';
+import Highlight from '../components/Highlight.jsx';
 import { fetchNewArrivals, fetchFeaturedProduct } from '../services/productService.js';
 
 /* Seed-data categories for "Shop by Category" */
@@ -105,6 +110,11 @@ function Home() {
           </Reveal>
         </div>
       </section>
+
+      {/* =====================================================
+          BRAND MOMENT — full-bleed image + centered statement
+          ===================================================== */}
+      <BrandMoment />
 
       {/* =====================================================
           SHOP BY CATEGORY
@@ -214,6 +224,36 @@ function Home() {
       <FeaturedProduct product={featuredProduct} />
 
       {/* =====================================================
+          IMAGE COMPARISON — two large panels
+          ===================================================== */}
+      <ImageComparison />
+
+      {/* =====================================================
+          MATERIALS — short rich text block
+          ===================================================== */}
+      <section className="bg-accent/20 border-t border-border">
+        <div className="max-w-3xl mx-auto px-5 lg:px-9 xl:px-12 py-16 md:py-20 text-center">
+          <Reveal>
+            <h2 className="font-heading text-2xl md:text-3xl text-foreground">
+              Fabrics we'd choose for our <Highlight>own</Highlight>.
+            </h2>
+          </Reveal>
+          <Reveal>
+            <p className="mt-5 text-muted-foreground leading-relaxed max-w-lg mx-auto">
+              Mostly cotton, always breathable. We look for materials gentle
+              enough for the most sensitive skin, and sturdy enough to
+              survive every wash.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* =====================================================
+          BUILD YOUR SET — shortlist picker
+          ===================================================== */}
+      <BuildYourSet products={newArrivals} />
+
+      {/* =====================================================
           SCROLLING TEXT — full-bleed marquee
           ===================================================== */}
       <ScrollingText />
@@ -260,6 +300,19 @@ function Home() {
           BEST SELLERS — tabbed product carousel
           ===================================================== */}
       <BestSellers />
+
+      {/* =====================================================
+          SCROLLING TEXT — second marquee, reversed
+          ===================================================== */}
+      <ScrollingText
+        phrases={['Free Shipping', 'Easy Returns', 'Secure Checkout', 'Made With Love']}
+        direction="right"
+      />
+
+      {/* =====================================================
+          JOURNAL — editorial content teasers
+          ===================================================== */}
+      <Journal />
 
       {/* =====================================================
           FAQ
