@@ -8,6 +8,10 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const redirectTo = location.state?.from || '/';
+  const redirectReason =
+    location.state?.from === '/checkout'
+      ? 'Log in to continue to checkout.'
+      : 'Log in to pick up where you left off.';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,9 +45,7 @@ function Login() {
   return (
     <div className="max-w-md mx-auto px-4 sm:px-6 py-16 md:py-24">
       <h1 className="font-heading text-3xl md:text-4xl text-foreground">Welcome back</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Log in to pick up where you left off.
-      </p>
+      <p className="mt-2 text-sm text-muted-foreground">{redirectReason}</p>
 
       <form onSubmit={handleSubmit} className="mt-10 space-y-5" noValidate>
         <div>
