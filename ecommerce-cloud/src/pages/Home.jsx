@@ -8,8 +8,12 @@ import CategoryCollage from '../components/CategoryCollage.jsx';
 import Lookbook from '../components/Lookbook.jsx';
 import Testimonials from '../components/Testimonials.jsx';
 import Faq from '../components/Faq.jsx';
-import Highlight from '../components/Highlight.jsx';
-import { fetchNewArrivals } from '../services/productService.js';
+import Hero from '../components/Hero.jsx';
+import ScrollingText from '../components/ScrollingText.jsx';
+import FeaturedProduct from '../components/FeaturedProduct.jsx';
+import ShopTheEdit from '../components/ShopTheEdit.jsx';
+import BestSellers from '../components/BestSellers.jsx';
+import { fetchNewArrivals, fetchFeaturedProduct } from '../services/productService.js';
 
 /* Seed-data categories for "Shop by Category" */
 const categories = [
@@ -65,85 +69,40 @@ function Reveal({ children, className = '' }) {
 function Home() {
   const [newArrivals, setNewArrivals] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [featuredProduct, setFeaturedProduct] = useState(null);
 
   useEffect(() => {
     fetchNewArrivals(4).then((data) => {
       setNewArrivals(data);
       setLoadingProducts(false);
     });
+    fetchFeaturedProduct().then(setFeaturedProduct);
   }, []);
 
   return (
     <div>
       {/* =====================================================
-          HERO SECTION
-          Warm cream bg, editorial layout, strong typography
+          HERO SECTION — full-bleed slideshow
+          ===================================================== */}
+      <Hero />
+
+      {/* =====================================================
+          BRAND STORY — rich text intro, right after the hero
           ===================================================== */}
       <section className="bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Text */}
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-            >
-              <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl text-foreground leading-tight">
-                Little clothes.
-                <br />
-                Big <Highlight>moments</Highlight>.
-              </h1>
-              <p className="mt-5 text-muted-foreground text-lg md:text-xl max-w-lg leading-relaxed">
-                Thoughtfully made essentials for your little one's everyday
-                adventures. Soft fabrics, simple designs, and everyday comfort.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button asChild size="lg" className="px-6 py-3 text-base">
-                  <Link to="/shop">Shop New Arrivals</Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="px-6 py-3 text-base">
-                  <Link to="/shop?category=newborn-essentials">Newborn Essentials</Link>
-                </Button>
-              </div>
-            </motion.div>
-
-            {/* Hero Visual — editorial product collage */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
-              className="relative"
-            >
-              <div className="grid grid-cols-2 gap-3">
-                {/* Large featured image */}
-                <div className="col-span-1 row-span-2 aspect-[3/4] rounded-lg overflow-hidden bg-muted border border-border">
-                  <img
-                    src="https://placehold.co/600x800/f5f0eb/4a4a4a?text=Bunny+Romper"
-                    alt="Cotton Bunny Romper — soft organic cotton"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                {/* Two smaller images stacked */}
-                <div className="aspect-[4/3] rounded-lg overflow-hidden bg-muted border border-border">
-                  <img
-                    src="https://placehold.co/600x450/f5f0eb/4a4a4a?text=Welcome+Set"
-                    alt="Newborn Welcome Set — 5-piece essentials"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="aspect-[4/3] rounded-lg overflow-hidden bg-muted border border-border">
-                  <img
-                    src="https://placehold.co/600x450/f5f0eb/4a4a4a?text=Sleepsuit"
-                    alt="Cloud Print Sleepsuit — dreamy comfort"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              </div>
-              {/* Subtle decorative accent */}
-              <div className="absolute -bottom-3 -right-3 w-20 h-20 rounded-lg bg-primary/8 -z-10" />
-              <div className="absolute -top-3 -left-3 w-14 h-14 rounded-lg bg-secondary/60 -z-10" />
-            </motion.div>
-          </div>
+        <div className="max-w-3xl mx-auto px-5 lg:px-9 xl:px-12 py-16 md:py-24 text-center">
+          <Reveal>
+            <h2 className="font-heading text-3xl md:text-4xl text-foreground">
+              Made for the little things.
+            </h2>
+          </Reveal>
+          <Reveal>
+            <p className="mt-6 text-muted-foreground text-lg leading-relaxed max-w-xl mx-auto">
+              From the first sleepy morning to the messiest afternoon
+              adventure, we believe baby clothes should feel as good as they
+              look. Soft fabrics. Thoughtful details. Everyday comfort.
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -152,7 +111,7 @@ function Home() {
           Editorial cards with imagery area
           ===================================================== */}
       <section className="bg-accent/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-16 md:py-20">
           <Reveal>
             <div className="text-center mb-10">
               <h2 className="font-heading text-3xl md:text-4xl text-foreground">
@@ -184,7 +143,7 @@ function Home() {
           NEW ARRIVALS — live Supabase data
           ===================================================== */}
       <section className="bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-16 md:py-20">
           <Reveal>
             <div className="flex items-end justify-between mb-10">
               <div>
@@ -250,35 +209,30 @@ function Home() {
       </section>
 
       {/* =====================================================
+          FEATURED PRODUCT — single-product spotlight
+          ===================================================== */}
+      <FeaturedProduct product={featuredProduct} />
+
+      {/* =====================================================
+          SCROLLING TEXT — full-bleed marquee
+          ===================================================== */}
+      <ScrollingText />
+
+      {/* =====================================================
+          SHOP THE EDIT — shoppable photo grid
+          ===================================================== */}
+      <ShopTheEdit products={newArrivals} />
+
+      {/* =====================================================
           LOOKBOOK — shoppable lifestyle image
           ===================================================== */}
       {!loadingProducts && <Lookbook products={newArrivals} />}
 
       {/* =====================================================
-          BRAND STORY
-          ===================================================== */}
-      <section className="bg-accent/20 border-t border-border">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 text-center">
-          <Reveal>
-            <h2 className="font-heading text-3xl md:text-4xl text-foreground">
-              Made for the little things.
-            </h2>
-          </Reveal>
-          <Reveal>
-            <p className="mt-6 text-muted-foreground text-lg leading-relaxed max-w-xl mx-auto">
-              From the first sleepy morning to the messiest afternoon
-              adventure, we believe baby clothes should feel as good as they
-              look. Soft fabrics. Thoughtful details. Everyday comfort.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* =====================================================
           TRUST / QUALITY
           ===================================================== */}
       <section className="bg-muted/30 border-t border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-18">
+        <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-14 md:py-18">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {trustPoints.map((point) => (
               <Reveal key={point.title}>
@@ -301,6 +255,11 @@ function Home() {
           TESTIMONIALS
           ===================================================== */}
       <Testimonials />
+
+      {/* =====================================================
+          BEST SELLERS — tabbed product carousel
+          ===================================================== */}
+      <BestSellers />
 
       {/* =====================================================
           FAQ

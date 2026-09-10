@@ -1,10 +1,68 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, User, Search, Sun, Moon, Menu, X } from 'lucide-react';
+import { ShoppingBag, User, Search, Sun, Moon, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { AnimatePresence, motion } from 'motion/react';
+
+const ANNOUNCEMENTS = [
+  'Free shipping on orders over ₹1,999',
+  'New arrivals every week',
+  'Soft, breathable fabrics for delicate skin',
+];
+
+function AnnouncementBar() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % ANNOUNCEMENTS.length);
+    }, 4500);
+    return () => clearInterval(id);
+  }, []);
+
+  const go = (delta) => {
+    setIndex((i) => (i + delta + ANNOUNCEMENTS.length) % ANNOUNCEMENTS.length);
+  };
+
+  return (
+    <div className="bg-neutral-950 text-neutral-50">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12">
+        <div className="flex items-center justify-between h-10">
+          <button
+            type="button"
+            onClick={() => go(-1)}
+            aria-label="Previous announcement"
+            className="p-1 text-neutral-400 hover:text-neutral-50 transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={index}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="text-xs font-medium tracking-wide"
+            >
+              {ANNOUNCEMENTS[index]}
+            </motion.p>
+          </AnimatePresence>
+          <button
+            type="button"
+            onClick={() => go(1)}
+            aria-label="Next announcement"
+            className="p-1 text-neutral-400 hover:text-neutral-50 transition-colors"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -36,9 +94,11 @@ function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm border-b border-border transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <div className="sticky top-0 z-50">
+      <AnnouncementBar />
+      <nav className="bg-background/95 backdrop-blur-sm border-b border-border transition-colors">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12">
+        <div className="flex items-center justify-between py-6 lg:py-8">
           {/* Logo */}
           <Link to="/" className="font-heading text-2xl text-foreground tracking-tight">
             LittleNest
@@ -50,9 +110,10 @@ function Navbar() {
               <Link
                 key={link.label}
                 to={link.to}
-                className="text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide transition-colors"
+                className="group relative text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide transition-colors py-1"
               >
                 {link.label}
+                <span className="absolute left-0 -bottom-0.5 h-px w-full bg-foreground scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300 ease-out" />
               </Link>
             ))}
           </div>
@@ -200,7 +261,8 @@ function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+      </nav>
+    </div>
   );
 }
 

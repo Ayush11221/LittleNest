@@ -111,7 +111,7 @@ function Cart() {
   const subtotal = calculateSubtotal(lines);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-12 md:py-16">
       <h1 className="font-heading text-3xl md:text-4xl text-foreground">Your Bag</h1>
 
       {removedNotice && (

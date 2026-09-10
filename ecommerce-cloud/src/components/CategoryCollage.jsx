@@ -14,7 +14,7 @@ function CategoryCollage({ categories }) {
       {featured && (
         <Link
           to={`/shop?category=${featured.slug}`}
-          className="group relative col-span-2 md:row-span-2 rounded-3xl overflow-hidden shadow-soft aspect-[4/5] md:aspect-auto md:h-full"
+          className="group relative col-span-2 md:row-span-2 rounded-3xl overflow-hidden shadow-soft aspect-[4/5] md:aspect-auto md:h-full transition-transform duration-300 ease-out hover:-translate-y-1"
         >
           <img
             src={`https://placehold.co/800x1000/f5f0eb/4a4a4a?text=${encodeURIComponent(featured.name)}`}
@@ -33,7 +33,7 @@ function CategoryCollage({ categories }) {
         <Link
           key={cat.slug}
           to={`/shop?category=${cat.slug}`}
-          className="group relative rounded-2xl overflow-hidden shadow-soft aspect-square md:aspect-auto md:h-full"
+          className="group relative rounded-2xl overflow-hidden shadow-soft aspect-square md:aspect-auto md:h-full transition-transform duration-300 ease-out hover:-translate-y-1"
         >
           <img
             src={`https://placehold.co/480x480/f5f0eb/4a4a4a?text=${encodeURIComponent(cat.name)}`}

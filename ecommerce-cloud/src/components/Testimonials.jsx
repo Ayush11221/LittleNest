@@ -24,7 +24,7 @@ const testimonials = [
 function Testimonials() {
   return (
     <section className="bg-background border-t border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-16 md:py-20">
         <div className="text-center mb-10">
           <h2 className="font-heading text-3xl md:text-4xl text-foreground">
             From LittleNest parents

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 function Footer() {
   return (
     <footer className="bg-neutral-950 text-neutral-50 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">

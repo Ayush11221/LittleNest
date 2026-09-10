@@ -35,6 +35,44 @@ export async function fetchNewArrivals(limit = 4) {
 }
 
 /**
+ * Fetch the merchant-flagged featured product for the homepage spotlight.
+ * Falls back to the newest active product if none is flagged, so the
+ * section still has something to show.
+ */
+export async function fetchFeaturedProduct() {
+  const base = supabase
+    .from('products')
+    .select('id, name, slug, price, compare_at_price, image_url, rating, description')
+    .eq('is_active', true);
+
+  const { data: featured, error: featuredError } = await base
+    .eq('is_featured', true)
+    .limit(1)
+    .maybeSingle();
+
+  if (featuredError) {
+    console.error('Error fetching featured product:', featuredError.message);
+    return null;
+  }
+  if (featured) return featured;
+
+  const { data: fallback, error: fallbackError } = await supabase
+    .from('products')
+    .select('id, name, slug, price, compare_at_price, image_url, rating, description')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (fallbackError) {
+    console.error('Error fetching fallback featured product:', fallbackError.message);
+    return null;
+  }
+
+  return fallback;
+}
+
+/**
  * Fetch all active categories ordered by display_order.
  */
 export async function fetchCategories() {
