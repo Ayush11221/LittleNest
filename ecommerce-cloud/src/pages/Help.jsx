@@ -1,26 +1,28 @@
-import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Truck, RotateCcw, MessageCircle, ArrowRight } from 'lucide-react';
 
-/* Scrolls to an in-page section when the URL includes a hash, e.g. /help#returns. */
-function useScrollToHash() {
-  useEffect(() => {
-    if (!window.location.hash) return;
-    const el = document.getElementById(window.location.hash.slice(1));
-    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
-}
-
-function HelpSection({ id, title, children }) {
-  return (
-    <section id={id} className="py-8 border-b border-border last:border-b-0">
-      <h2 className="font-heading text-xl text-foreground">{title}</h2>
-      <p className="mt-3 text-muted-foreground leading-relaxed">{children}</p>
-    </section>
-  );
-}
+const LINKS = [
+  {
+    icon: Truck,
+    title: 'Shipping',
+    text: 'Processing times, delivery estimates, and shipping charges.',
+    to: '/shipping',
+  },
+  {
+    icon: RotateCcw,
+    title: 'Returns & Refunds',
+    text: 'Our 15-day return window, and how refunds and exchanges work.',
+    to: '/returns',
+  },
+  {
+    icon: MessageCircle,
+    title: 'Contact Us',
+    text: "Can't find what you're looking for? Send us a message.",
+    to: '/contact',
+  },
+];
 
 function Help() {
-  useScrollToHash();
-
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
       <h1 className="font-heading text-3xl md:text-4xl text-foreground">Help &amp; Support</h1>
@@ -28,24 +30,21 @@ function Help() {
         A few common questions, answered simply.
       </p>
 
-      <div className="mt-10">
-        <HelpSection id="shipping" title="Shipping">
-          We aim to get every order packed and on its way as quickly and
-          carefully as possible. Delivery times vary by location, and
-          estimated shipping is shown at checkout before you place an order.
-        </HelpSection>
-
-        <HelpSection id="returns" title="Returns">
-          Simple and transparent returns within 15 days of delivery. If
-          something isn't quite right, we want to make it easy to sort out.
-        </HelpSection>
-
-        <HelpSection id="contact" title="Contact">
-          LittleNest is a college cloud-computing project built to
-          demonstrate a working e-commerce application, rather than a live
-          store with a support team. Questions about the project itself are
-          best directed to the project's contributors.
-        </HelpSection>
+      <div className="mt-10 space-y-4">
+        {LINKS.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            className="group flex items-start gap-4 border border-border rounded-2xl p-5 hover:bg-muted/50 transition-colors"
+          >
+            <link.icon className="h-5 w-5 mt-0.5 text-primary shrink-0" strokeWidth={1.5} />
+            <div className="flex-1 min-w-0">
+              <h2 className="font-heading text-lg text-foreground">{link.title}</h2>
+              <p className="mt-1 text-sm text-muted-foreground">{link.text}</p>
+            </div>
+            <ArrowRight className="h-4 w-4 mt-1 text-muted-foreground group-hover:text-foreground transition-colors shrink-0" />
+          </Link>
+        ))}
       </div>
     </div>
   );

@@ -55,17 +55,17 @@ function Footer() {
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/help#shipping" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
+                <Link to="/shipping" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Shipping
                 </Link>
               </li>
               <li>
-                <Link to="/help#returns" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
+                <Link to="/returns" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Returns
                 </Link>
               </li>
               <li>
-                <Link to="/help#contact" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
+                <Link to="/contact" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Contact
                 </Link>
               </li>

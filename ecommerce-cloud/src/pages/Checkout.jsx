@@ -11,6 +11,10 @@ import { createOrder } from '../services/orderService.js';
 const inputClass =
   'w-full h-10 px-3 rounded-md border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors';
 
+/** Matches the "Free shipping on orders over ₹1,999" banner shown site-wide. */
+const FREE_SHIPPING_THRESHOLD = 1999;
+const FLAT_SHIPPING_FEE = 100;
+
 function Checkout() {
   const { user, loading: authLoading } = useAuth();
   const { lines, loading: cartLoading, clearCart } = useCartLines();
@@ -29,6 +33,8 @@ function Checkout() {
   const [paying, setPaying] = useState(false);
 
   const subtotal = calculateSubtotal(lines);
+  const shippingFee = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING_FEE;
+  const total = subtotal + shippingFee;
 
   if (authLoading || cartLoading) return null;
   if (!user) return <Navigate to="/login" replace state={{ from: '/checkout' }} />;
@@ -59,7 +65,7 @@ function Checkout() {
       .join(', ');
 
     await openRazorpayCheckout({
-      amount: subtotal,
+      amount: total,
       description: 'LittleNest order',
       prefill: {
         name: form.name,
@@ -72,7 +78,7 @@ function Checkout() {
           lines,
           subtotal,
           shipping: {
-            cost: 0,
+            cost: shippingFee,
             name: form.name,
             email: user.email,
             phone: form.phone,
@@ -208,11 +214,18 @@ function Checkout() {
             </div>
             <div className="mt-2 flex justify-between text-sm">
               <span className="text-muted-foreground">Shipping</span>
-              <span className="font-medium text-foreground">Free</span>
+              <span className="font-medium text-foreground">
+                {shippingFee === 0 ? 'Free' : formatCurrency(shippingFee)}
+              </span>
             </div>
+            {shippingFee > 0 && (
+              <p className="mt-1 text-xs text-muted-foreground">
+                Add {formatCurrency(FREE_SHIPPING_THRESHOLD - subtotal)} more for free shipping.
+              </p>
+            )}
             <div className="mt-3 pt-3 border-t border-border flex justify-between">
               <span className="font-semibold text-foreground">Total</span>
-              <span className="font-semibold text-foreground">{formatCurrency(subtotal)}</span>
+              <span className="font-semibold text-foreground">{formatCurrency(total)}</span>
             </div>
 
             {errorMessage && (
@@ -222,7 +235,7 @@ function Checkout() {
             )}
 
             <Button size="lg" className="w-full mt-6" onClick={handlePay} disabled={paying}>
-              {paying ? 'Processing…' : `Pay ${formatCurrency(subtotal)}`}
+              {paying ? 'Processing…' : `Pay ${formatCurrency(total)}`}
             </Button>
           </div>
         </div>
