@@ -42,7 +42,7 @@ function Lookbook({ products }) {
               near the edge isn't cut off by the image's rounded corners. */}
           <div className="absolute inset-0 rounded-3xl overflow-hidden">
             <img
-              src="https://placehold.co/1600x700/f0e9e2/4a4a4a?text=Lookbook"
+              src="https://images.unsplash.com/photo-1522771930-78848d9293e8?w=1600&h=700&fit=crop&auto=format&q=80"
               alt="A little one dressed in LittleNest essentials"
               className="h-full w-full object-cover"
             />

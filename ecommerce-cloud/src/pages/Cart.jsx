@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Minus, Plus } from 'lucide-react';
 import { Button } from '../components/ui/button.jsx';
 import { formatCurrency } from '../utils/formatCurrency.js';
@@ -25,6 +25,7 @@ function CartSkeleton() {
 function Cart() {
   const { lines, loading, error, removedNotice, retry, updateQuantity, removeFromCart, clearCart } =
     useCartLines();
+  const navigate = useNavigate();
 
   const subtotal = calculateSubtotal(lines);
 
@@ -173,12 +174,9 @@ function Cart() {
                 Shipping and tax calculated at checkout.
               </p>
 
-              <Button size="lg" className="w-full mt-6">
+              <Button size="lg" className="w-full mt-6" onClick={() => navigate('/checkout')}>
                 Checkout
               </Button>
-              <p className="mt-2 text-xs text-muted-foreground text-center">
-                Checkout coming in the next phase.
-              </p>
             </div>
           </div>
         </div>

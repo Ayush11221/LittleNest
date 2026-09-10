@@ -3,19 +3,19 @@ import { ArrowRight } from 'lucide-react';
 
 const ENTRIES = [
   {
-    image: 'https://placehold.co/700x500/eae1d3/eae1d3',
+    image: 'https://images.unsplash.com/photo-1753369232906-7dddb0011aa9?w=700&h=500&fit=crop&auto=format&q=80',
     title: 'Choosing the right size',
     excerpt: "Babies grow fast — here's how we think about sizing so you're not guessing.",
     href: '/help',
   },
   {
-    image: 'https://placehold.co/700x500/e2d7c6/e2d7c6',
+    image: 'https://images.unsplash.com/photo-1741596742787-a500123ac663?w=700&h=500&fit=crop&auto=format&q=80',
     title: 'Caring for delicate fabrics',
     excerpt: 'A closer look at the materials we choose and how to keep them soft, wash after wash.',
     href: '/about#materials',
   },
   {
-    image: 'https://placehold.co/700x500/ded1bd/ded1bd',
+    image: 'https://images.unsplash.com/photo-1582212742497-86a2c4495267?w=700&h=500&fit=crop&auto=format&q=80',
     title: 'Building a newborn wardrobe',
     excerpt: 'The handful of essentials worth having ready before your little one arrives.',
     href: '/shop?category=newborn-essentials',

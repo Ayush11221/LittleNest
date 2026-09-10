@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button.jsx';
 import { useAuth, getAuthErrorMessage } from '../context/AuthContext.jsx';
 
 function Login() {
   const { user, loading, signIn } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from || '/';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +15,7 @@ function Login() {
   const [submitting, setSubmitting] = useState(false);
 
   if (loading) return null;
-  if (user) return <Navigate to="/" replace />;
+  if (user) return <Navigate to={redirectTo} replace />;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,7 +35,7 @@ function Login() {
       return;
     }
 
-    navigate('/', { replace: true });
+    navigate(redirectTo, { replace: true });
   };
 
   return (
