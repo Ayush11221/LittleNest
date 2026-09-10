@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingBag, User, Search, Sun, Moon, Menu, X } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext.jsx';
+import { useCart } from '../context/CartContext.jsx';
 import { AnimatePresence, motion } from 'motion/react';
 
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
+  const { itemCount } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
@@ -47,10 +49,17 @@ function Navbar() {
 
             <Link
               to="/cart"
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Shopping bag"
+              className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label={
+                itemCount > 0 ? `Shopping bag, ${itemCount} items` : 'Shopping bag'
+              }
             >
               <ShoppingBag className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="absolute top-0.5 right-0.5 h-4 min-w-4 px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-medium flex items-center justify-center">
+                  {itemCount > 99 ? '99+' : itemCount}
+                </span>
+              )}
             </Link>
 
             <Link

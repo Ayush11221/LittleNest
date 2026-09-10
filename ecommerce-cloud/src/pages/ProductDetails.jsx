@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { Button } from '../components/ui/button.jsx';
 import { formatCurrency } from '../utils/formatCurrency.js';
 import { fetchProductBySlug } from '../services/productService.js';
+import { useCart } from '../context/CartContext.jsx';
 
 function DetailSkeleton() {
   return (
@@ -36,7 +37,9 @@ function SpecRow({ label, value }) {
 
 function ProductDetails() {
   const { slug } = useParams();
+  const { addToCart } = useCart();
 
+  const [justAdded, setJustAdded] = useState(false);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -132,6 +135,7 @@ function ProductDetails() {
       setSelectedColor(null);
     }
     setQuantity(1);
+    setJustAdded(false);
   };
 
   const handleSelectColor = (color) => {
@@ -141,6 +145,7 @@ function ProductDetails() {
       setSelectedSize(null);
     }
     setQuantity(1);
+    setJustAdded(false);
   };
 
   function isColorAvailableFor(size, color) {
@@ -165,6 +170,25 @@ function ProductDetails() {
 
   const decreaseQuantity = () => setQuantity((q) => Math.max(1, q - 1));
   const increaseQuantity = () => setQuantity((q) => Math.min(maxQuantity, q + 1));
+
+  const handleAddToBag = () => {
+    if (!selectedVariant) return;
+    addToCart(product.id, selectedVariant.id, quantity);
+    setJustAdded(true);
+  };
+
+  /* Tells the shopper what's still needed before they can add to the bag. */
+  const selectionHint = (() => {
+    if (selectedVariant) return null;
+    if (variants.length === 0) return 'This item is currently unavailable.';
+
+    const missing = [];
+    if (sizes.length > 0 && !selectedSize) missing.push('size');
+    if (hasColors && !selectedColor) missing.push('color');
+    if (missing.length === 0) return null;
+
+    return `Select a ${missing.join(' and ')} to continue.`;
+  })();
 
   if (loading) {
     return (
@@ -384,12 +408,30 @@ function ProductDetails() {
 
           {/* Add to Bag */}
           <div className="mt-8">
-            <Button size="lg" className="w-full sm:w-auto sm:min-w-48">
+            <Button
+              size="lg"
+              className="w-full sm:w-auto sm:min-w-48"
+              disabled={!selectedVariant}
+              onClick={handleAddToBag}
+            >
               Add to Bag
             </Button>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Cart coming in the next phase.
-            </p>
+
+            {justAdded ? (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Added to bag.{' '}
+                <Link
+                  to="/cart"
+                  className="text-primary hover:text-primary/80 transition-colors"
+                >
+                  View bag
+                </Link>
+              </p>
+            ) : (
+              selectionHint && (
+                <p className="mt-2 text-xs text-muted-foreground">{selectionHint}</p>
+              )
+            )}
           </div>
         </div>
       </div>

@@ -137,3 +137,29 @@ export async function fetchProductBySlug(slug) {
 
   return { data: data || null, error };
 }
+
+/**
+ * Fetch current variant rows (with their parent product) for the
+ * given variant ids — used to hydrate the guest cart with live
+ * prices, stock, and product details.
+ *
+ * RLS already limits anonymous reads to active variants and active
+ * products, so ids that are no longer purchasable simply do not
+ * come back and are treated as unavailable by the caller.
+ */
+export async function fetchVariantsByIds(variantIds) {
+  if (!variantIds || variantIds.length === 0) {
+    return { data: [], error: null };
+  }
+
+  const { data, error } = await supabase
+    .from('product_variants')
+    .select('*, products(*)')
+    .in('id', variantIds);
+
+  if (error) {
+    console.error('Error fetching cart variants:', error.message);
+  }
+
+  return { data: data || [], error };
+}
