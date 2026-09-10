@@ -112,3 +112,28 @@ export async function fetchProducts({
 
   return { data: data || [], error };
 }
+
+/**
+ * Fetch a single active product by slug for the product details page,
+ * including its category, variants, and gallery images.
+ *
+ * Returns { data, error }. Uses maybeSingle() so a slug that matches
+ * no active product resolves to { data: null, error: null } — a
+ * genuine "not found" — distinct from a failed request.
+ */
+export async function fetchProductBySlug(slug) {
+  const { data, error } = await supabase
+    .from('products')
+    .select(
+      '*, categories(name, slug), product_variants(*), product_images(*)'
+    )
+    .eq('slug', slug)
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching product:', error.message);
+  }
+
+  return { data: data || null, error };
+}
