@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import Home from './pages/Home.jsx';
@@ -15,8 +15,18 @@ import Help from './pages/Help.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 import NotFound from './pages/NotFound.jsx';
+import AdminLayout from './pages/admin/AdminLayout.jsx';
+import AdminDashboard from './pages/admin/AdminDashboard.jsx';
+import AdminProducts from './pages/admin/AdminProducts.jsx';
+import AdminProductForm from './pages/admin/AdminProductForm.jsx';
+import AdminCategories from './pages/admin/AdminCategories.jsx';
+import AdminOrders from './pages/admin/AdminOrders.jsx';
+import AdminCustomers from './pages/admin/AdminCustomers.jsx';
 
 function App() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <a
@@ -25,7 +35,7 @@ function App() {
       >
         Skip to content
       </a>
-      <Navbar />
+      {!isAdmin && <Navbar />}
       <main id="main-content" className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -41,10 +51,21 @@ function App() {
           <Route path="/help" element={<Help />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
+
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="products/new" element={<AdminProductForm />} />
+            <Route path="products/:id/edit" element={<AdminProductForm />} />
+            <Route path="categories" element={<AdminCategories />} />
+            <Route path="orders" element={<AdminOrders />} />
+            <Route path="customers" element={<AdminCustomers />} />
+          </Route>
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <Footer />
+      {!isAdmin && <Footer />}
     </div>
   );
 }

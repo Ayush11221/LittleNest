@@ -17,7 +17,10 @@ function CategoryCollage({ categories }) {
           className="group relative col-span-2 md:row-span-2 rounded-3xl overflow-hidden shadow-soft aspect-[4/5] md:aspect-auto md:h-full transition-transform duration-300 ease-out hover:-translate-y-1"
         >
           <img
-            src={`https://placehold.co/800x1000/f5f0eb/4a4a4a?text=${encodeURIComponent(featured.name)}`}
+            src={
+              featured.image_url ||
+              `https://placehold.co/800x1000/f5f0eb/4a4a4a?text=${encodeURIComponent(featured.name)}`
+            }
             alt={featured.name}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -36,7 +39,10 @@ function CategoryCollage({ categories }) {
           className="group relative rounded-2xl overflow-hidden shadow-soft aspect-square md:aspect-auto md:h-full transition-transform duration-300 ease-out hover:-translate-y-1"
         >
           <img
-            src={`https://placehold.co/480x480/f5f0eb/4a4a4a?text=${encodeURIComponent(cat.name)}`}
+            src={
+              cat.image_url ||
+              `https://placehold.co/480x480/f5f0eb/4a4a4a?text=${encodeURIComponent(cat.name)}`
+            }
             alt={cat.name}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"

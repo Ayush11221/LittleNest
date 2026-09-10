@@ -268,7 +268,7 @@ function Shop() {
       {/* Banner */}
       <section className="relative h-[220px] md:h-[300px] overflow-hidden bg-muted">
         <img
-          src="https://placehold.co/1900x500/e3d7c8/e3d7c8"
+          src={activeCategory?.image_url || 'https://placehold.co/1900x500/e3d7c8/e3d7c8'}
           alt=""
           className="h-full w-full object-cover"
         />

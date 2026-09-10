@@ -18,20 +18,11 @@ import ImageComparison from '../components/ImageComparison.jsx';
 import BuildYourSet from '../components/BuildYourSet.jsx';
 import Journal from '../components/Journal.jsx';
 import Highlight from '../components/Highlight.jsx';
-import { fetchNewArrivals, fetchFeaturedProduct } from '../services/productService.js';
-
-/* Seed-data categories for "Shop by Category" */
-const categories = [
-  { name: 'Newborn Essentials', slug: 'newborn-essentials' },
-  { name: 'Onesies & Rompers', slug: 'onesies-rompers' },
-  { name: 'Tops & T-Shirts', slug: 'tops-tshirts' },
-  { name: 'Bottoms', slug: 'bottoms' },
-  { name: 'Dresses', slug: 'dresses' },
-  { name: 'Co-ord Sets', slug: 'coord-sets' },
-  { name: 'Sleepwear', slug: 'sleepwear' },
-  { name: 'Winter Wear', slug: 'winter-wear' },
-  { name: 'Accessories', slug: 'accessories' },
-];
+import {
+  fetchNewArrivals,
+  fetchFeaturedProduct,
+  fetchCategories,
+} from '../services/productService.js';
 
 const trustPoints = [
   {
@@ -75,6 +66,8 @@ function Home() {
   const [newArrivals, setNewArrivals] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [featuredProduct, setFeaturedProduct] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
   useEffect(() => {
     fetchNewArrivals(4).then((data) => {
@@ -82,6 +75,10 @@ function Home() {
       setLoadingProducts(false);
     });
     fetchFeaturedProduct().then(setFeaturedProduct);
+    fetchCategories().then((data) => {
+      setCategories(data);
+      setLoadingCategories(false);
+    });
   }, []);
 
   return (
@@ -133,9 +130,26 @@ function Home() {
             </div>
           </Reveal>
 
-          <Reveal>
-            <CategoryCollage categories={categories} />
-          </Reveal>
+          {loadingCategories ? (
+            <div className="grid grid-cols-2 gap-4 md:gap-5 md:grid-cols-4 md:h-[560px]">
+              {[...Array(5)].map((_, i) => (
+                <div
+                  key={i}
+                  className={`animate-pulse rounded-2xl bg-muted ${
+                    i === 0 ? 'col-span-2 md:row-span-2 aspect-[4/5] md:aspect-auto md:h-full' : 'aspect-square md:aspect-auto md:h-full'
+                  }`}
+                />
+              ))}
+            </div>
+          ) : categories.length > 0 ? (
+            <Reveal>
+              <CategoryCollage categories={categories} />
+            </Reveal>
+          ) : (
+            <p className="text-center text-sm text-muted-foreground py-12">
+              Connect Supabase and add categories to see them here.
+            </p>
+          )}
 
           <div className="mt-8 text-center">
             <Link
