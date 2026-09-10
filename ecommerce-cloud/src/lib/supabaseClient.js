@@ -10,4 +10,12 @@ if (!supabaseUrl || !supabaseKey) {
   );
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// createClient() throws synchronously on an invalid URL, which would crash
+// the whole app before it can render any UI (including the pages that don't
+// need Supabase). Fall back to a placeholder URL so the app still mounts;
+// every real request will then fail gracefully into the existing
+// loading/error states instead of a blank screen.
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseKey || 'placeholder-anon-key'
+);

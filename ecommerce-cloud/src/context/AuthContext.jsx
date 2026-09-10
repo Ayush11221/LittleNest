@@ -43,6 +43,8 @@ export function getAuthErrorMessage(error) {
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -65,6 +67,37 @@ export function AuthProvider({ children }) {
       subscription.unsubscribe();
     };
   }, []);
+
+  /* Loads the profile row (name, role) for the signed-in user — used to gate /admin. */
+  useEffect(() => {
+    const userId = session?.user?.id;
+    if (!userId) {
+      setProfile(null);
+      setProfileLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+    setProfileLoading(true);
+
+    supabase
+      .from('profiles')
+      .select('id, name, email, role')
+      .eq('id', userId)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          console.error('Error fetching profile:', error.message);
+        }
+        setProfile(data ?? null);
+        setProfileLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.user?.id]);
 
   /**
    * Creates the account. The profiles row and the user's cart row are
@@ -143,6 +176,7 @@ export function AuthProvider({ children }) {
   };
 
   const user = session?.user ?? null;
+  const isAdmin = profile?.role === 'admin';
 
   return (
     <AuthContext.Provider
@@ -150,6 +184,9 @@ export function AuthProvider({ children }) {
         session,
         user,
         loading,
+        profile,
+        profileLoading,
+        isAdmin,
         signUp,
         signIn,
         signOut,

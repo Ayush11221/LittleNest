@@ -1,11 +1,73 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Minus, Plus } from 'lucide-react';
+import {
+  Minus,
+  Plus,
+  Star,
+  Shirt,
+  Baby,
+  Tag,
+  Droplets,
+  Truck,
+  RotateCcw,
+  ShieldCheck,
+  Expand,
+  ArrowUp,
+} from 'lucide-react';
 import { motion } from 'motion/react';
 import { Button } from '../components/ui/button.jsx';
 import { formatCurrency } from '../utils/formatCurrency.js';
-import { fetchProductBySlug } from '../services/productService.js';
+import {
+  fetchProductBySlug,
+  fetchRelatedProducts,
+  fetchProductsByIds,
+} from '../services/productService.js';
 import { useCart } from '../context/CartContext.jsx';
+import { useRecentlyViewed } from '../context/RecentlyViewedContext.jsx';
+import Lightbox from '../components/ui/lightbox.jsx';
+import ProductRow from '../components/ProductRow.jsx';
+import ShareRow from '../components/ShareRow.jsx';
+
+/** Anchor nav for jumping between sections further down the page. */
+function ProductTabs({ tabs }) {
+  return (
+    <div className="border-y border-border">
+      <div className="flex items-center gap-1 py-2 overflow-x-auto">
+        <a
+          href="#product-top"
+          aria-label="Back to top"
+          className="shrink-0 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+        >
+          <ArrowUp className="h-4 w-4" />
+        </a>
+        {tabs.map((tab) => (
+          <a
+            key={tab.id}
+            href={`#${tab.id}`}
+            className="shrink-0 px-4 py-2 rounded-full text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          >
+            {tab.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Compact rating pill — e.g. "★ 4.5". Hidden when there's no rating yet. */
+function RatingBadge({ rating }) {
+  if (!rating) return null;
+  return (
+    <span
+      className="flex items-center gap-1 pl-1.5 pr-2 py-0.5 rounded-full bg-muted text-xs font-medium text-foreground"
+      role="img"
+      aria-label={`Rated ${rating} out of 5`}
+    >
+      <Star className="h-3 w-3 text-highlight" fill="currentColor" strokeWidth={0} />
+      {rating}
+    </span>
+  );
+}
 
 function DetailSkeleton() {
   return (
@@ -25,21 +87,11 @@ function DetailSkeleton() {
   );
 }
 
-function SpecRow({ label, value }) {
-  if (!value) return null;
-  return (
-    <div className="flex gap-4 py-2 text-sm">
-      <dt className="w-32 shrink-0 text-muted-foreground">{label}</dt>
-      <dd className="text-foreground">{value}</dd>
-    </div>
-  );
-}
-
 function ProductDetails() {
   const { slug } = useParams();
-  const { addToCart } = useCart();
+  const { addToCart, openDrawer } = useCart();
+  const { productIds: recentlyViewedIds, recordView } = useRecentlyViewed();
 
-  const [justAdded, setJustAdded] = useState(false);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -49,6 +101,12 @@ function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
+
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [recentlyViewedProducts, setRecentlyViewedProducts] = useState([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,6 +128,30 @@ function ProductDetails() {
       cancelled = true;
     };
   }, [slug, retryToken]);
+
+  /* Record the view and load related products once the product is known. */
+  useEffect(() => {
+    if (!product) return;
+    recordView(product.id);
+    fetchRelatedProducts(product.category_id, product.id).then(setRelatedProducts);
+    // Only re-run when the product itself changes, not on every recordView identity change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id]);
+
+  /* Hydrate the "recently viewed" list, excluding the product being viewed. */
+  useEffect(() => {
+    const ids = recentlyViewedIds.filter((id) => id !== product?.id);
+    if (ids.length === 0) {
+      setRecentlyViewedProducts([]);
+      return;
+    }
+    fetchProductsByIds(ids).then((data) => {
+      // Preserve most-recent-first order from the stored id list.
+      const byId = new Map(data.map((p) => [p.id, p]));
+      setRecentlyViewedProducts(ids.map((id) => byId.get(id)).filter(Boolean));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recentlyViewedIds, product?.id]);
 
   /* Active variants, sizes, colors — derived from the real variant rows only. */
   const variants = useMemo(
@@ -135,7 +217,6 @@ function ProductDetails() {
       setSelectedColor(null);
     }
     setQuantity(1);
-    setJustAdded(false);
   };
 
   const handleSelectColor = (color) => {
@@ -145,7 +226,6 @@ function ProductDetails() {
       setSelectedSize(null);
     }
     setQuantity(1);
-    setJustAdded(false);
   };
 
   function isColorAvailableFor(size, color) {
@@ -174,7 +254,7 @@ function ProductDetails() {
   const handleAddToBag = () => {
     if (!selectedVariant) return;
     addToCart(product.id, selectedVariant.id, quantity);
-    setJustAdded(true);
+    openDrawer();
   };
 
   /* Tells the shopper what's still needed before they can add to the bag. */
@@ -192,7 +272,7 @@ function ProductDetails() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-12 md:py-16">
         <DetailSkeleton />
       </div>
     );
@@ -200,7 +280,7 @@ function ProductDetails() {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-24 text-center">
         <p className="text-foreground font-medium">Something went wrong</p>
         <p className="mt-2 text-sm text-muted-foreground">
           We couldn't load this product right now. Please try again.
@@ -214,7 +294,7 @@ function ProductDetails() {
 
   if (!product) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-24 text-center">
         <p className="text-foreground font-medium">We couldn't find that one.</p>
         <Link
           to="/shop"
@@ -228,13 +308,23 @@ function ProductDetails() {
 
   const category = product.categories;
 
+  const highlights = [
+    product.material && { icon: Shirt, label: 'Material', value: product.material },
+    product.age_group && { icon: Baby, label: 'Age Group', value: product.age_group },
+    category?.name && { icon: Tag, label: 'Category', value: category.name },
+    product.care_instructions && { icon: Droplets, label: 'Care', value: product.care_instructions },
+  ].filter(Boolean);
+
+  const anyInStock = variants.some((v) => v.stock > 0);
+
   return (
     <motion.div
+      id="product-top"
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16"
     >
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-12 md:py-16">
       {/* Breadcrumb */}
       <nav className="mb-8 text-xs uppercase tracking-wide text-muted-foreground">
         <Link to="/shop" className="hover:text-foreground transition-colors">
@@ -256,24 +346,16 @@ function ProductDetails() {
       </nav>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-        {/* Images */}
-        <div>
-          <div className="aspect-[4/5] rounded-lg overflow-hidden bg-muted border border-border">
-            <img
-              src={activeImage || product.image_url}
-              alt={product.name}
-              className="h-full w-full object-cover"
-            />
-          </div>
-
+        {/* Images — thumbnails beside the main image on desktop, below it on mobile */}
+        <div className="flex flex-col-reverse lg:flex-row gap-3 lg:gap-4">
           {gallery.length > 1 && (
-            <div className="mt-4 flex gap-3">
+            <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible">
               {gallery.map((img) => (
                 <button
                   key={img}
                   type="button"
                   onClick={() => setActiveImage(img)}
-                  className={`h-16 w-16 shrink-0 rounded-md overflow-hidden border transition-colors ${
+                  className={`h-16 w-16 lg:h-20 lg:w-20 shrink-0 rounded-md overflow-hidden border transition-colors ${
                     activeImage === img ? 'border-foreground' : 'border-border'
                   }`}
                   aria-label="View image"
@@ -283,11 +365,35 @@ function ProductDetails() {
               ))}
             </div>
           )}
+
+          <div className="relative flex-1 aspect-[4/5] rounded-lg overflow-hidden bg-muted">
+            <img
+              src={activeImage || product.image_url}
+              alt={product.name}
+              className="h-full w-full object-cover"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setLightboxIndex(Math.max(0, gallery.indexOf(activeImage || product.image_url)));
+                setLightboxOpen(true);
+              }}
+              aria-label="View full-size image"
+              className="absolute bottom-3 right-3 p-2 rounded-full bg-background/90 shadow-soft text-foreground hover:bg-background transition-colors"
+            >
+              <Expand className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         {/* Info */}
         <div>
-          <h1 className="font-heading text-3xl md:text-4xl text-foreground">
+          {category && (
+            <p className="text-xs uppercase tracking-wide text-muted-foreground font-medium">
+              {category.name}
+            </p>
+          )}
+          <h1 className="mt-1 font-heading text-3xl md:text-4xl text-foreground">
             {product.name}
           </h1>
 
@@ -300,6 +406,9 @@ function ProductDetails() {
                 {formatCurrency(product.compare_at_price)}
               </span>
             )}
+            <span className="ml-auto">
+              <RatingBadge rating={product.rating} />
+            </span>
           </div>
 
           {product.description && (
@@ -308,12 +417,19 @@ function ProductDetails() {
             </p>
           )}
 
-          <dl className="mt-6 border-t border-border pt-4">
-            <SpecRow label="Category" value={category?.name} />
-            <SpecRow label="Age Group" value={product.age_group} />
-            <SpecRow label="Material" value={product.material} />
-            <SpecRow label="Care" value={product.care_instructions} />
-          </dl>
+          {highlights.length > 0 && (
+            <div id="product-highlights" className="mt-6 grid grid-cols-2 gap-4 rounded-2xl border border-border p-4">
+              {highlights.map((h) => (
+                <div key={h.label} className="flex items-center gap-2.5 min-w-0">
+                  <h.icon className="h-5 w-5 text-muted-foreground shrink-0" strokeWidth={1.5} />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">{h.value}</p>
+                    <p className="text-xs text-muted-foreground">{h.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Size */}
           {sizes.length > 0 && (
@@ -378,7 +494,7 @@ function ProductDetails() {
           {/* Quantity */}
           <div className="mt-6">
             <h3 className="text-sm font-medium text-foreground mb-3">Quantity</h3>
-            <div className="inline-flex items-center border border-border rounded-md">
+            <div className="inline-flex items-center border border-border rounded-full">
               <button
                 type="button"
                 onClick={decreaseQuantity}
@@ -400,9 +516,17 @@ function ProductDetails() {
               </button>
             </div>
             {selectedVariant && selectedVariant.stock <= 5 && (
-              <p className="mt-2 text-xs text-muted-foreground">
-                Only {selectedVariant.stock} left in stock.
-              </p>
+              <div className="mt-3 max-w-56">
+                <p className="text-xs text-muted-foreground">
+                  Only {selectedVariant.stock} left in stock.
+                </p>
+                <div className="mt-1.5 h-1 rounded-full bg-muted overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-highlight"
+                    style={{ width: `${Math.min(100, (selectedVariant.stock / 10) * 100)}%` }}
+                  />
+                </div>
+              </div>
             )}
           </div>
 
@@ -410,31 +534,64 @@ function ProductDetails() {
           <div className="mt-8">
             <Button
               size="lg"
-              className="w-full sm:w-auto sm:min-w-48"
+              className="w-full sm:w-auto sm:min-w-64 justify-between gap-6"
               disabled={!selectedVariant}
               onClick={handleAddToBag}
             >
-              Add to Bag
+              <span>Add to Bag</span>
+              {selectedVariant && <span>{formatCurrency(effectivePrice * quantity)}</span>}
             </Button>
 
-            {justAdded ? (
-              <p className="mt-2 text-xs text-muted-foreground">
-                Added to bag.{' '}
-                <Link
-                  to="/cart"
-                  className="text-primary hover:text-primary/80 transition-colors"
-                >
-                  View bag
-                </Link>
-              </p>
-            ) : (
-              selectionHint && (
-                <p className="mt-2 text-xs text-muted-foreground">{selectionHint}</p>
-              )
+            {selectionHint && (
+              <p className="mt-2 text-xs text-muted-foreground">{selectionHint}</p>
             )}
+          </div>
+
+          {/* Trust rows */}
+          <div className="mt-8 pt-6 border-t border-border space-y-3">
+            <div className="flex items-center gap-2.5 text-sm text-muted-foreground">
+              <Truck className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+              {anyInStock
+                ? 'In stock. Ships within 1–2 business days.'
+                : 'Currently unavailable.'}
+            </div>
+            <div className="flex items-center gap-2.5 text-sm text-muted-foreground">
+              <RotateCcw className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+              Easy returns within 15 days
+            </div>
+            <div className="flex items-center gap-2.5 text-sm text-muted-foreground">
+              <ShieldCheck className="h-4 w-4 shrink-0" strokeWidth={1.5} />
+              Secure checkout
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <ShareRow title={product.name} />
           </div>
         </div>
       </div>
+
+      </div>
+
+      {(highlights.length > 0 || relatedProducts.length > 0) && (
+        <ProductTabs
+          tabs={[
+            highlights.length > 0 && { id: 'product-highlights', label: 'Highlights' },
+            relatedProducts.length > 0 && { id: 'related-products', label: 'You May Also Like' },
+          ].filter(Boolean)}
+        />
+      )}
+
+      <ProductRow id="related-products" title="You May Also Like" products={relatedProducts} />
+      <ProductRow id="recently-viewed" title="Recently Viewed" products={recentlyViewedProducts} />
+
+      <Lightbox
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        images={gallery}
+        activeIndex={lightboxIndex}
+        onNavigate={setLightboxIndex}
+      />
     </motion.div>
   );
 }

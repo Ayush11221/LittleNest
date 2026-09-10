@@ -1,43 +1,47 @@
 import { Link } from 'react-router-dom';
 
+/**
+ * Deliberately theme-invariant — stays a solid dark block in both
+ * light and dark mode, rather than following the page's own tokens.
+ */
 function Footer() {
   return (
-    <footer className="bg-muted/50 border-t border-border mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <footer className="bg-neutral-950 text-neutral-50 mt-auto">
+      <div className="max-w-[1900px] mx-auto px-5 lg:px-9 xl:px-12 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link to="/" className="font-heading text-xl text-foreground tracking-tight">
+            <Link to="/" className="font-heading text-xl text-neutral-50 tracking-tight">
               LittleNest
             </Link>
-            <p className="text-muted-foreground text-sm mt-2 leading-relaxed">
+            <p className="text-neutral-400 text-sm mt-2 leading-relaxed">
               Little clothes. Big moments.
             </p>
           </div>
 
           {/* Shop */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-3 tracking-wide">
+            <h4 className="text-sm font-semibold text-neutral-50 mb-3 tracking-wide">
               Shop
             </h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/shop" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/shop" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   New Arrivals
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=onesies-rompers" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/shop?category=onesies-rompers" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Onesies &amp; Rompers
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=sleepwear" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/shop?category=sleepwear" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Sleepwear
                 </Link>
               </li>
               <li>
-                <Link to="/shop?category=accessories" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/shop?category=accessories" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Accessories
                 </Link>
               </li>
@@ -46,60 +50,60 @@ function Footer() {
 
           {/* Help */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-3 tracking-wide">
+            <h4 className="text-sm font-semibold text-neutral-50 mb-3 tracking-wide">
               Help
             </h4>
             <ul className="space-y-2">
               <li>
-                <span className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                <Link to="/help#shipping" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Shipping
-                </span>
+                </Link>
               </li>
               <li>
-                <span className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                <Link to="/help#returns" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Returns
-                </span>
+                </Link>
               </li>
               <li>
-                <span className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                <Link to="/help#contact" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Contact
-                </span>
+                </Link>
               </li>
             </ul>
           </div>
 
           {/* About */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-3 tracking-wide">
+            <h4 className="text-sm font-semibold text-neutral-50 mb-3 tracking-wide">
               About
             </h4>
             <ul className="space-y-2">
               <li>
-                <span className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                <Link to="/about" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Our Story
-                </span>
+                </Link>
               </li>
               <li>
-                <span className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+                <Link to="/about#materials" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Materials
-                </span>
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom */}
-        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-muted-foreground">
+        <div className="mt-10 pt-6 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-neutral-500">
             &copy; {new Date().getFullYear()} LittleNest. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <span className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+            <Link to="/privacy" className="text-xs text-neutral-500 hover:text-neutral-50 transition-colors">
               Privacy
-            </span>
-            <span className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+            </Link>
+            <Link to="/terms" className="text-xs text-neutral-500 hover:text-neutral-50 transition-colors">
               Terms
-            </span>
+            </Link>
           </div>
         </div>
       </div>
