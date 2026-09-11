@@ -50,9 +50,13 @@ function ShippingPolicy() {
 
         <Section title="Order tracking">
           <p>
-            We currently don't offer live courier tracking or email
-            notifications. If you need an update on your order, reach out
-            with your order number and we'll check on it for you.
+            You can see the status of any order from{' '}
+            <Link to="/account" className="text-primary hover:text-primary/80 transition-colors">
+              My Account
+            </Link>
+            . We don't offer live courier tracking or email notifications
+            yet — if you need more detail than the order status shows,
+            reach out with your order number and we'll check on it for you.
           </p>
         </Section>
 

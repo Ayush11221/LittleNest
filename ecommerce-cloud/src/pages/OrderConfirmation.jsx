@@ -19,9 +19,16 @@ function OrderConfirmation() {
           Order number: <span className="font-semibold">{orderNumber}</span>
         </p>
       )}
-      <Button asChild size="lg" className="mt-8">
-        <Link to="/shop">Continue Shopping</Link>
-      </Button>
+      <div className="mt-8 flex items-center justify-center gap-3">
+        {orderNumber && (
+          <Button asChild size="lg" variant="outline">
+            <Link to={`/account/orders/${orderNumber}`}>View Order</Link>
+          </Button>
+        )}
+        <Button asChild size="lg">
+          <Link to="/shop">Continue Shopping</Link>
+        </Button>
+      </div>
     </div>
   );
 }

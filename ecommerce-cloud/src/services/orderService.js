@@ -59,3 +59,32 @@ export async function createOrder({ userId, lines, subtotal, shipping, razorpayP
 
   return { data: order, error: null };
 }
+
+/** All orders for the signed-in user, most recent first — for the account order-history page. */
+export async function fetchUserOrders(userId) {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('id, order_number, order_status, payment_status, total_amount, created_at, order_items(id)')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching orders:', error.message);
+    return { data: [], error };
+  }
+  return { data: data || [], error: null };
+}
+
+/** One order with its line items — for the order detail page. RLS already scopes this to the owner. */
+export async function fetchOrderByNumber(orderNumber) {
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*, order_items(*)')
+    .eq('order_number', orderNumber)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error fetching order:', error.message);
+  }
+  return { data: data || null, error };
+}
