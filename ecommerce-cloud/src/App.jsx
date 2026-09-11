@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
@@ -9,12 +10,18 @@ import Cart from './pages/Cart.jsx';
 import Checkout from './pages/Checkout.jsx';
 import OrderConfirmation from './pages/OrderConfirmation.jsx';
 import Wishlist from './pages/Wishlist.jsx';
+import Account from './pages/Account.jsx';
+import OrderDetail from './pages/OrderDetail.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
 import About from './pages/About.jsx';
+import Materials from './pages/Materials.jsx';
 import Help from './pages/Help.jsx';
+import ShippingPolicy from './pages/ShippingPolicy.jsx';
+import ReturnsPolicy from './pages/ReturnsPolicy.jsx';
+import Contact from './pages/Contact.jsx';
 import Privacy from './pages/Privacy.jsx';
 import Terms from './pages/Terms.jsx';
 import NotFound from './pages/NotFound.jsx';
@@ -41,7 +48,15 @@ function App() {
       <ScrollToTop />
       {!isAdmin && <Navbar />}
       <main id="main-content" className="flex-1">
-        <Routes>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+          >
+        <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/products/:slug" element={<ProductDetails />} />
@@ -49,12 +64,18 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation/:orderNumber" element={<OrderConfirmation />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/account/orders/:orderNumber" element={<OrderDetail />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/about" element={<About />} />
+          <Route path="/materials" element={<Materials />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/shipping" element={<ShippingPolicy />} />
+          <Route path="/returns" element={<ReturnsPolicy />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
 
@@ -70,6 +91,8 @@ function App() {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+          </motion.div>
+        </AnimatePresence>
       </main>
       {!isAdmin && <Footer />}
     </div>

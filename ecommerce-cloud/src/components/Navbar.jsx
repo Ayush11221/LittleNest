@@ -263,6 +263,13 @@ function Navbar() {
                         Signed in as{' '}
                         <span className="text-foreground">{user.email}</span>
                       </p>
+                      <Link
+                        to="/account"
+                        onClick={() => setAccountOpen(false)}
+                        className="block px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        My Account
+                      </Link>
                       <button
                         onClick={handleSignOut}
                         className="w-full text-left px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -361,6 +368,13 @@ function Navbar() {
                   <p className="text-xs text-muted-foreground py-2 truncate">
                     Signed in as <span className="text-foreground">{user.email}</span>
                   </p>
+                  <Link
+                    to="/account"
+                    onClick={() => setMobileOpen(false)}
+                    className="block text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide py-2 transition-colors"
+                  >
+                    My Account
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="block w-full text-left text-muted-foreground hover:text-foreground text-sm font-medium tracking-wide py-2 transition-colors"

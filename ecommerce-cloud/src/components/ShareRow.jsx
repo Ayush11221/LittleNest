@@ -1,10 +1,21 @@
-import { Facebook, Twitter, Mail } from 'lucide-react';
+import { Facebook, Twitter, Mail, Link2 } from 'lucide-react';
+import { useToast } from '../context/ToastContext.jsx';
 
 /** Standard share-intent links for the current page — real outbound URLs, no tracking added. */
 function ShareRow({ title }) {
+  const { showToast } = useToast();
   const url = typeof window !== 'undefined' ? window.location.href : '';
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      showToast('Link copied');
+    } catch {
+      showToast('Could not copy link', 'error');
+    }
+  };
 
   const links = [
     {
@@ -39,6 +50,14 @@ function ShareRow({ title }) {
           <link.icon className="h-3.5 w-3.5" />
         </a>
       ))}
+      <button
+        type="button"
+        onClick={handleCopyLink}
+        aria-label="Copy link"
+        className="p-1.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+      >
+        <Link2 className="h-3.5 w-3.5" />
+      </button>
     </div>
   );
 }

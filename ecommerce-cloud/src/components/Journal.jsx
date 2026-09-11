@@ -12,7 +12,7 @@ const ENTRIES = [
     image: 'https://images.unsplash.com/photo-1741596742787-a500123ac663?w=700&h=500&fit=crop&auto=format&q=80',
     title: 'Caring for delicate fabrics',
     excerpt: 'A closer look at the materials we choose and how to keep them soft, wash after wash.',
-    href: '/about#materials',
+    href: '/materials',
   },
   {
     image: 'https://images.unsplash.com/photo-1582212742497-86a2c4495267?w=700&h=500&fit=crop&auto=format&q=80',
