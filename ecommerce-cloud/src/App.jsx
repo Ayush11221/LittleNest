@@ -14,6 +14,7 @@ import Signup from './pages/Signup.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
 import ResetPassword from './pages/ResetPassword.jsx';
 import About from './pages/About.jsx';
+import Materials from './pages/Materials.jsx';
 import Help from './pages/Help.jsx';
 import ShippingPolicy from './pages/ShippingPolicy.jsx';
 import ReturnsPolicy from './pages/ReturnsPolicy.jsx';
@@ -57,6 +58,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/about" element={<About />} />
+          <Route path="/materials" element={<Materials />} />
           <Route path="/help" element={<Help />} />
           <Route path="/shipping" element={<ShippingPolicy />} />
           <Route path="/returns" element={<ReturnsPolicy />} />

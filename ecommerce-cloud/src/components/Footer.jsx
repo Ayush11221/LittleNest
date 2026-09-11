@@ -84,7 +84,7 @@ function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/about#materials" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
+                <Link to="/materials" className="text-sm text-neutral-400 hover:text-neutral-50 transition-colors">
                   Materials
                 </Link>
               </li>

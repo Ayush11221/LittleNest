@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Heart, RotateCcw, ShieldCheck, Baby } from 'lucide-react';
 
 const trustPoints = [
@@ -15,7 +14,7 @@ const trustPoints = [
   {
     icon: ShieldCheck,
     title: 'Secure Checkout',
-    text: 'Your information stays protected at every step.',
+    text: 'Payments are handled by Razorpay — your card and bank details never touch our servers.',
   },
   {
     icon: Baby,
@@ -24,18 +23,7 @@ const trustPoints = [
   },
 ];
 
-/* Scrolls to an in-page section when the URL includes a hash, e.g. /about#materials. */
-function useScrollToHash() {
-  useEffect(() => {
-    if (!window.location.hash) return;
-    const el = document.getElementById(window.location.hash.slice(1));
-    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, []);
-}
-
 function About() {
-  useScrollToHash();
-
   return (
     <div>
       <section className="bg-background">
@@ -48,27 +36,42 @@ function About() {
             we believe baby clothes should feel as good as they look. Soft
             fabrics. Thoughtful details. Everyday comfort.
           </p>
-          <p className="mt-4 text-muted-foreground leading-relaxed max-w-xl mx-auto">
-            LittleNest started as a simple idea — that the clothes parents
-            reach for every day should be as considered as the moments their
-            little ones grow through in them. No fuss, no excess. Just soft,
-            well-made pieces built for real days.
-          </p>
         </div>
       </section>
 
-      <section id="materials" className="bg-accent/20 border-t border-border">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-          <h2 className="font-heading text-2xl md:text-3xl text-foreground text-center">
-            Materials
-          </h2>
-          <p className="mt-5 text-muted-foreground leading-relaxed text-center max-w-xl mx-auto">
-            We look for fabrics that feel gentle against delicate skin and
-            hold up to everyday wear and washing — natural, breathable
-            materials over anything synthetic or scratchy. Each product page
-            lists the exact material and care instructions for that piece, so
-            you always know what you're bringing home.
-          </p>
+      <section className="bg-accent/20 border-t border-border">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 space-y-8">
+          <div>
+            <h2 className="font-heading text-2xl text-foreground mb-2">How we started</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              LittleNest started as a simple idea — that the clothes parents
+              reach for every day should be as considered as the moments
+              their little ones grow through in them. No fuss, no excess.
+              Just soft, well-made pieces built for real days: the 3 a.m.
+              changes, the messy lunches, the naps that end up happening
+              anywhere but the crib.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-heading text-2xl text-foreground mb-2">What we believe</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              A baby's skin is more sensitive than ours, so we start every
+              design decision with the fabric, not the print. We'd rather
+              sell fewer things we'd genuinely put on our own kids than fill
+              a catalog with everything at once — that's why the range
+              stays small and each piece lists exactly what it's made of.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="font-heading text-2xl text-foreground mb-2">Where we're headed</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              We're still small. As LittleNest grows, the plan is to expand
+              sizes and categories at the same pace we can keep making sure
+              of what's in the box — not faster.
+            </p>
+          </div>
         </div>
       </section>
 
