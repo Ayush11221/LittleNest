@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Heart, Star } from 'lucide-react';
 import { formatCurrency } from '../utils/formatCurrency.js';
 import { useWishlist } from '../context/WishlistContext.jsx';
+import { useToast } from '../context/ToastContext.jsx';
 
 /**
  * Reusable product card with image hover scale, wishlist heart,
@@ -9,7 +10,13 @@ import { useWishlist } from '../context/WishlistContext.jsx';
  */
 function ProductCard({ product }) {
   const { isWishlisted, toggleWishlist } = useWishlist();
+  const { showToast } = useToast();
   const wishlisted = isWishlisted(product.id);
+
+  const handleWishlistClick = () => {
+    toggleWishlist(product.id);
+    showToast(wishlisted ? 'Removed from wishlist' : 'Added to wishlist', 'heart');
+  };
 
   const hasDiscount =
     product.compare_at_price != null &&
@@ -37,7 +44,7 @@ function ProductCard({ product }) {
 
         {/* Wishlist button */}
         <button
-          onClick={() => toggleWishlist(product.id)}
+          onClick={handleWishlistClick}
           className="absolute top-3 right-3 p-2 rounded-full bg-background shadow-soft text-muted-foreground hover:text-foreground transition-colors"
           aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
         >

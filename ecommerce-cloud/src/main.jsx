@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 import { WishlistProvider } from './context/WishlistContext.jsx';
 import { RecentlyViewedProvider } from './context/RecentlyViewedContext.jsx';
+import { ToastProvider } from './context/ToastContext.jsx';
 import App from './App.jsx';
 import './index.css';
 
@@ -19,7 +20,9 @@ createRoot(document.getElementById('root')).render(
             <CartProvider>
               <WishlistProvider>
                 <RecentlyViewedProvider>
-                  <App />
+                  <ToastProvider>
+                    <App />
+                  </ToastProvider>
                 </RecentlyViewedProvider>
               </WishlistProvider>
             </CartProvider>

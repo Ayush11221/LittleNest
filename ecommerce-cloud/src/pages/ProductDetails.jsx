@@ -105,6 +105,9 @@ function ProductDetails() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
+  const [zooming, setZooming] = useState(false);
+  const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
+
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [recentlyViewedProducts, setRecentlyViewedProducts] = useState([]);
 
@@ -366,11 +369,30 @@ function ProductDetails() {
             </div>
           )}
 
-          <div className="relative flex-1 aspect-[4/5] rounded-lg overflow-hidden bg-muted">
+          <div
+            className="relative flex-1 aspect-[4/5] rounded-lg overflow-hidden bg-muted cursor-zoom-in"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setZoomOrigin({
+                x: ((e.clientX - rect.left) / rect.width) * 100,
+                y: ((e.clientY - rect.top) / rect.height) * 100,
+              });
+            }}
+            onMouseEnter={() => setZooming(true)}
+            onMouseLeave={() => setZooming(false)}
+          >
             <img
               src={activeImage || product.image_url}
               alt={product.name}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover transition-transform duration-200 ease-out"
+              style={
+                zooming
+                  ? {
+                      transform: 'scale(1.8)',
+                      transformOrigin: `${zoomOrigin.x}% ${zoomOrigin.y}%`,
+                    }
+                  : undefined
+              }
             />
             <button
               type="button"

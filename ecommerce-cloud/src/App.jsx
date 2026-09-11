@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
@@ -47,7 +48,15 @@ function App() {
       <ScrollToTop />
       {!isAdmin && <Navbar />}
       <main id="main-content" className="flex-1">
-        <Routes>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={location.pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+          >
+        <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/products/:slug" element={<ProductDetails />} />
@@ -82,6 +91,8 @@ function App() {
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+          </motion.div>
+        </AnimatePresence>
       </main>
       {!isAdmin && <Footer />}
     </div>

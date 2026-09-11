@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { formatCurrency } from '../../utils/formatCurrency.js';
 import { fetchAdminOrders, updateOrderStatus } from '../../services/adminService.js';
+import { useToast } from '../../context/ToastContext.jsx';
 
 const ORDER_STATUSES = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
 
 function AdminOrders() {
+  const { showToast } = useToast();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,9 +23,10 @@ function AdminOrders() {
   const handleStatusChange = async (order, status) => {
     const { error } = await updateOrderStatus(order.id, status);
     if (error) {
-      window.alert(error.message || 'Could not update order status.');
+      showToast(error.message || 'Could not update order status.', 'error');
       return;
     }
+    showToast(`${order.order_number} marked as ${status}`);
     load();
   };
 
