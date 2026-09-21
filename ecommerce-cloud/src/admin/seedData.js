@@ -3,8 +3,11 @@
  *
  * Photos are real, licensed images from Unsplash (Unsplash License —
  * free for commercial and non-commercial use, no attribution required),
- * hotlinked from their CDN as Unsplash's own guidelines allow. Product
- * names, descriptions, and prices are invented for this project.
+ * hotlinked from their CDN as Unsplash's own guidelines allow, and
+ * visually verified to actually show the named garment. Product names
+ * and descriptions describe what each photo actually shows rather than
+ * an invented feature (e.g. no "cloud print" when the photo is plain
+ * white) — prices are still invented for this project.
  */
 
 const img = (id, w = 900, h = 1125) =>
@@ -83,11 +86,11 @@ export const SEED_CATEGORIES = [
  */
 export const SEED_PRODUCTS = [
   {
-    name: 'Cotton Bunny Romper',
+    name: 'Classic Cotton Romper',
     slug: 'cotton-bunny-romper',
     category: 'onesies-rompers',
     description:
-      'A soft, organic-cotton romper with a playful bunny print. Snap closures make changing quick and easy.',
+      'A soft, organic-cotton romper in classic white. Snap closures make changing quick and easy.',
     price: 799,
     compare_at_price: 999,
     age_group: '0-3 Months',
@@ -108,14 +111,14 @@ export const SEED_PRODUCTS = [
     slug: 'newborn-welcome-set',
     category: 'newborn-essentials',
     description:
-      'A 5-piece essentials set for your baby’s first days home — romper, cap, mittens, booties, and a swaddle.',
+      "A colorful bundle of your baby's first pieces — soft cotton essentials in a range of gentle shades.",
     price: 1499,
     compare_at_price: null,
     age_group: '0-3 Months',
     gender: 'unisex',
     material: 'Cotton Blend',
     care_instructions: 'Machine wash cold, lay flat to dry',
-    image_url: img('1510154221590-ff63e90a136f'),
+    image_url: img('1766918780914-5df4a5a98c44'),
     rating: 4.9,
     is_featured: true,
     variants: [
@@ -124,18 +127,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Cloud Print Sleepsuit',
+    name: 'Classic White Footed Sleepsuit',
     slug: 'cloud-print-sleepsuit',
     category: 'sleepwear',
     description:
-      'A dreamy cloud-print sleepsuit with flat seams and a two-way zip for easy midnight changes.',
+      'A soft, full-length footed sleepsuit with flat seams and easy changing access for midnight changes.',
     price: 899,
     compare_at_price: null,
     age_group: '3-6 Months',
     gender: 'unisex',
     material: '100% Cotton',
     care_instructions: 'Machine wash cold, do not bleach',
-    image_url: img('1622290291165-d341f1938b8a'),
+    image_url: img('1620354600301-e8b325ef1181'),
     rating: 4.7,
     is_featured: false,
     variants: [
@@ -156,7 +159,7 @@ export const SEED_PRODUCTS = [
     gender: 'unisex',
     material: '100% Cotton',
     care_instructions: 'Machine wash cold',
-    image_url: img('1546015720-b8b30df5aa27'),
+    image_url: img('1581093835839-f1dcc85c1765'),
     rating: 4.5,
     is_featured: false,
     variants: [
@@ -166,18 +169,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Everyday Jogger Pants',
+    name: 'Soft Pink Knit Pants',
     slug: 'everyday-jogger-pants',
     category: 'bottoms',
     description:
-      'Soft French terry joggers with an adjustable elastic waist that grows with your little one.',
+      'Soft, stretchy knit pants with an easy elastic waist that grows with your little one.',
     price: 699,
     compare_at_price: 849,
     age_group: '1-2 Years',
     gender: 'unisex',
     material: 'Cotton French Terry',
     care_instructions: 'Machine wash cold, tumble dry low',
-    image_url: img('1556905055-8f358a7a47b2'),
+    image_url: img('1602887627273-85fff2433015'),
     rating: 4.6,
     is_featured: false,
     variants: [
@@ -186,18 +189,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Sunday Pinafore Dress',
+    name: 'White Occasion Dress',
     slug: 'sunday-pinafore-dress',
     category: 'dresses',
     description:
-      'A simple pinafore dress in soft cotton poplin, made for twirling and everyday adventures alike.',
+      'A dreamy white dress with delicate ruffle sleeves — made for twirling and special days.',
     price: 999,
     compare_at_price: null,
     age_group: '2-3 Years',
     gender: 'girl',
     material: 'Cotton Poplin',
     care_instructions: 'Machine wash cold, hang to dry',
-    image_url: img('1543346242-2b8e41fb91ca'),
+    image_url: img('1653835785932-1710eac6385d'),
     rating: 4.8,
     is_featured: true,
     variants: [
@@ -207,18 +210,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Weekend Co-ord Set',
+    name: 'White Ruffle Playsuit',
     slug: 'weekend-coord-set',
     category: 'coord-sets',
     description:
-      'A relaxed tee-and-shorts set in matching soft cotton — the easiest way to get dressed on a busy morning.',
+      'A soft ruffle-trim playsuit in breathable cotton — the easiest way to get dressed on a busy morning.',
     price: 899,
     compare_at_price: null,
     age_group: '1-2 Years',
     gender: 'unisex',
     material: '100% Cotton',
     care_instructions: 'Machine wash cold',
-    image_url: img('1622290291468-a28f7a7dc6a8'),
+    image_url: img('1568385247005-0d371d214a2c'),
     rating: 4.6,
     is_featured: false,
     variants: [
@@ -227,18 +230,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Quilted Puffer Jacket',
+    name: 'Yellow Puffer Snowsuit',
     slug: 'quilted-puffer-jacket',
     category: 'winter-wear',
     description:
-      'A lightweight quilted jacket with a soft fleece lining, made to keep little ones warm without the bulk.',
+      'A cosy quilted snowsuit in cheerful yellow, made to keep little ones warm on cold-weather outings.',
     price: 1299,
     compare_at_price: 1599,
     age_group: '1-2 Years',
     gender: 'unisex',
     material: 'Polyester Shell, Fleece Lining',
     care_instructions: 'Machine wash cold, hang to dry',
-    image_url: img('1684244160171-97f5dac39204'),
+    image_url: img('1699516781997-21beee06a67f'),
     rating: 4.7,
     is_featured: true,
     variants: [
@@ -247,17 +250,17 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Soft Knit Beanie',
+    name: 'Heart Patch Knit Beanie',
     slug: 'soft-knit-beanie',
     category: 'accessories',
-    description: 'A gently stretchy knit beanie that keeps its shape wash after wash.',
+    description: 'A gently stretchy knit beanie with a sweet heart patch that keeps its shape wash after wash.',
     price: 349,
     compare_at_price: null,
     age_group: '6-12 Months',
     gender: 'unisex',
     material: 'Cotton Knit',
     care_instructions: 'Hand wash cold',
-    image_url: img('1569974641446-22542de88536'),
+    image_url: img('1630650916169-87efcfd2cd3a'),
     rating: 4.4,
     is_featured: false,
     variants: [
@@ -277,7 +280,7 @@ export const SEED_PRODUCTS = [
     gender: 'unisex',
     material: '100% Organic Muslin Cotton',
     care_instructions: 'Machine wash cold',
-    image_url: img('1470116945706-e6bf5d5a53ca'),
+    image_url: img('1537544176619-f79b157c634b'),
     rating: 4.9,
     is_featured: false,
     variants: [
@@ -286,17 +289,17 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Button-Up Cardigan',
+    name: 'Red Knit Hooded Cardigan',
     slug: 'button-up-cardigan',
     category: 'tops-tshirts',
-    description: 'A soft knit cardigan with wooden buttons — a cosy layer for cooler evenings.',
+    description: 'A soft knit hooded cardigan with playful ear details — a cosy layer for cooler evenings.',
     price: 799,
     compare_at_price: null,
     age_group: '6-12 Months',
     gender: 'unisex',
     material: 'Cotton Knit',
     care_instructions: 'Hand wash cold, dry flat',
-    image_url: img('1560506840-ec148e82a604'),
+    image_url: img('1611883916950-9a433d1a5401'),
     rating: 4.6,
     is_featured: false,
     variants: [
@@ -305,18 +308,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Ribbed Footed Sleepsuit',
+    name: 'Grey Bear-Hood Footed Romper',
     slug: 'ribbed-footed-sleepsuit',
     category: 'sleepwear',
     description:
-      'A snug, ribbed sleepsuit with covered feet — no more searching for lost socks at bedtime.',
+      'A snug, hooded footed romper with playful bear ears — no more searching for lost socks at bedtime.',
     price: 649,
     compare_at_price: null,
     age_group: '3-6 Months',
     gender: 'unisex',
     material: '95% Cotton, 5% Elastane',
     care_instructions: 'Machine wash cold',
-    image_url: img('1591161555818-7b9debeccc07'),
+    image_url: img('1583007109931-cdf68cdc4f4d'),
     rating: 4.7,
     is_featured: false,
     variants: [
@@ -329,14 +332,14 @@ export const SEED_PRODUCTS = [
     slug: 'denim-look-dungarees',
     category: 'bottoms',
     description:
-      'Soft jersey dungarees with a denim-look print — easy poppers for quick changes, no rough denim.',
+      'Soft denim-look dungarees with easy poppers for quick changes, built for everyday adventures.',
     price: 899,
     compare_at_price: null,
     age_group: '1-2 Years',
     gender: 'unisex',
     material: 'Cotton Jersey',
     care_instructions: 'Machine wash cold',
-    image_url: img('1552819289-824d37ca69d2'),
+    image_url: img('1563330183-d44b627e4ea1'),
     rating: 4.5,
     is_featured: false,
     variants: [
@@ -345,18 +348,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Floral Puff-Sleeve Dress',
+    name: 'Floral Tulle Party Dress',
     slug: 'floral-puff-sleeve-dress',
     category: 'dresses',
     description:
-      'A lightweight floral dress with gentle puff sleeves and a twirl-friendly hem.',
+      'A lightweight floral tulle dress with gentle puff sleeves — perfect for celebrations and photos.',
     price: 1099,
     compare_at_price: 1299,
     age_group: '2-3 Years',
     gender: 'girl',
     material: 'Cotton Voile',
     care_instructions: 'Machine wash cold, hang to dry',
-    image_url: img('1596252732610-fce5ac542f8e'),
+    image_url: img('1676509926048-5410d37f478d'),
     rating: 4.8,
     is_featured: false,
     variants: [
@@ -365,17 +368,17 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Terry Cloth Romper',
+    name: 'Hooded Terry Wrap',
     slug: 'terry-cloth-romper',
     category: 'onesies-rompers',
-    description: 'A textured terry romper that feels like a warm towel hug all day long.',
+    description: 'A textured terry wrap with a soft hood that feels like a warm towel hug all day long.',
     price: 749,
     compare_at_price: null,
     age_group: '6-12 Months',
     gender: 'unisex',
     material: 'Cotton Terry',
     care_instructions: 'Machine wash cold, tumble dry low',
-    image_url: img('1543342384-1f1350e27861'),
+    image_url: img('1564172327270-baad3ce623ad'),
     rating: 4.6,
     is_featured: false,
     variants: [
@@ -384,17 +387,17 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Knit Booties & Mitten Set',
+    name: 'Knit Booties Set',
     slug: 'knit-booties-mitten-set',
     category: 'accessories',
-    description: 'A matching knit booties and mittens set to keep tiny hands and feet warm.',
+    description: 'Hand-knit booties to keep tiny feet warm — soft, stretchy, and easy to slip on.',
     price: 449,
     compare_at_price: null,
     age_group: '0-3 Months',
     gender: 'unisex',
     material: 'Acrylic Knit',
     care_instructions: 'Hand wash cold',
-    image_url: img('1608039649006-df579ad70c64'),
+    image_url: img('1513091250092-b06c2b7981bc'),
     rating: 4.5,
     is_featured: false,
     variants: [
@@ -403,18 +406,18 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Fleece-Lined Snowsuit',
+    name: 'Golden Winter Coverall',
     slug: 'fleece-lined-snowsuit',
     category: 'winter-wear',
     description:
-      'A cosy all-in-one snowsuit with fleece lining and a fold-over cuff to protect little hands.',
+      'A cosy all-in-one winter coverall with a fold-over cuff to protect little hands from the cold.',
     price: 1699,
     compare_at_price: 1999,
     age_group: '6-12 Months',
     gender: 'unisex',
     material: 'Polyester Shell, Fleece Lining',
     care_instructions: 'Machine wash cold, hang to dry',
-    image_url: img('1580301762395-21ce84d00bc6'),
+    image_url: img('1699516781997-21beee06a67f'),
     rating: 4.9,
     is_featured: false,
     variants: [
@@ -423,17 +426,17 @@ export const SEED_PRODUCTS = [
     ],
   },
   {
-    name: 'Two-Piece Lounge Set',
+    name: 'Cotton Basics Collection',
     slug: 'two-piece-lounge-set',
     category: 'coord-sets',
-    description: 'A relaxed-fit tee and pants set in soft ribbed cotton, perfect for lazy mornings.',
+    description: 'A rotation of soft cotton basics in easy everyday colors, ready for laundry day and beyond.',
     price: 999,
     compare_at_price: null,
     age_group: '2-3 Years',
     gender: 'unisex',
     material: 'Ribbed Cotton',
     care_instructions: 'Machine wash cold',
-    image_url: img('1566004100631-35d015d6a491'),
+    image_url: img('1760727772969-cb5cd59c6f30'),
     rating: 4.6,
     is_featured: false,
     variants: [
