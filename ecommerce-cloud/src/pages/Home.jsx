@@ -334,26 +334,21 @@ function Home() {
       <Faq />
 
       {/* =====================================================
-          NEWSLETTER
+          CLOSING CTA
           ===================================================== */}
       <section className="bg-background border-t border-border">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-18 text-center">
           <Reveal>
             <h2 className="font-heading text-2xl md:text-3xl text-foreground">
-              Stay in the loop
+              Ready to find their new favourite?
             </h2>
             <p className="mt-2 text-muted-foreground text-sm">
-              New arrivals, soft favourites, and little updates — delivered to
-              your inbox.
+              New arrivals land every week — soft, simple pieces made for
+              everyday little adventures.
             </p>
-            <div className="mt-6 flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 rounded-lg border border-input bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-shadow"
-              />
-              <Button size="lg" className="px-5">
-                Subscribe
+            <div className="mt-6">
+              <Button asChild size="lg" className="px-8">
+                <Link to="/shop">Shop New Arrivals</Link>
               </Button>
             </div>
           </Reveal>
