@@ -25,6 +25,7 @@ import {
 import { useCart } from '../context/CartContext.jsx';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext.jsx';
 import Lightbox from '../components/ui/lightbox.jsx';
+import SizeGuide from '../components/ui/size-guide.jsx';
 import ProductRow from '../components/ProductRow.jsx';
 import ShareRow from '../components/ShareRow.jsx';
 
@@ -104,6 +105,7 @@ function ProductDetails() {
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   const [zooming, setZooming] = useState(false);
   const [zoomOrigin, setZoomOrigin] = useState({ x: 50, y: 50 });
@@ -440,7 +442,7 @@ function ProductDetails() {
           )}
 
           {highlights.length > 0 && (
-            <div id="product-highlights" className="mt-6 grid grid-cols-2 gap-4 rounded-2xl border border-border p-4">
+            <div id="product-highlights" className="mt-6 scroll-mt-[150px] grid grid-cols-2 gap-4 rounded-2xl border border-border p-4">
               {highlights.map((h) => (
                 <div key={h.label} className="flex items-center gap-2.5 min-w-0">
                   <h.icon className="h-5 w-5 text-muted-foreground shrink-0" strokeWidth={1.5} />
@@ -456,7 +458,16 @@ function ProductDetails() {
           {/* Size */}
           {sizes.length > 0 && (
             <div className="mt-6">
-              <h3 className="text-sm font-medium text-foreground mb-3">Size</h3>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-medium text-foreground">Size</h3>
+                <button
+                  type="button"
+                  onClick={() => setSizeGuideOpen(true)}
+                  className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
+                >
+                  Size Guide
+                </button>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {sizes.map((size) => {
                   const inStock = isSizeInStock(size);
@@ -556,7 +567,7 @@ function ProductDetails() {
           <div className="mt-8">
             <Button
               size="lg"
-              className="w-full sm:w-auto sm:min-w-64 justify-between gap-6"
+              className="w-full sm:w-auto sm:min-w-72 h-16 px-8 justify-between gap-6 text-base font-bold"
               disabled={!selectedVariant}
               onClick={handleAddToBag}
             >
@@ -614,6 +625,7 @@ function ProductDetails() {
         activeIndex={lightboxIndex}
         onNavigate={setLightboxIndex}
       />
+      <SizeGuide open={sizeGuideOpen} onClose={() => setSizeGuideOpen(false)} />
     </motion.div>
   );
 }

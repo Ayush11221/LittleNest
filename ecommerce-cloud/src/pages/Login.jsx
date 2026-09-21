@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button.jsx';
+import PasswordInput from '../components/ui/password-input.jsx';
 import { useAuth, getAuthErrorMessage } from '../context/AuthContext.jsx';
 
 function Login() {
@@ -74,13 +75,11 @@ function Login() {
               Forgot password?
             </Link>
           </div>
-          <input
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-10 px-3 rounded-md border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors"
           />
         </div>
 
