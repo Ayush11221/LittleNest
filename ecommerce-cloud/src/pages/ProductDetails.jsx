@@ -442,7 +442,7 @@ function ProductDetails() {
           )}
 
           {highlights.length > 0 && (
-            <div id="product-highlights" className="mt-6 grid grid-cols-2 gap-4 rounded-2xl border border-border p-4">
+            <div id="product-highlights" className="mt-6 scroll-mt-[150px] grid grid-cols-2 gap-4 rounded-2xl border border-border p-4">
               {highlights.map((h) => (
                 <div key={h.label} className="flex items-center gap-2.5 min-w-0">
                   <h.icon className="h-5 w-5 text-muted-foreground shrink-0" strokeWidth={1.5} />
