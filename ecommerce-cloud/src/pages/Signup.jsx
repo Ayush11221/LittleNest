@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button.jsx';
+import PasswordInput from '../components/ui/password-input.jsx';
 import {
   useAuth,
   getAuthErrorMessage,
@@ -129,13 +130,11 @@ function Signup() {
           >
             Password
           </label>
-          <input
+          <PasswordInput
             id="password"
-            type="password"
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-10 px-3 rounded-md border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50 transition-colors"
           />
           <p className="mt-2 text-xs text-muted-foreground">
             At least {MIN_PASSWORD_LENGTH} characters.
