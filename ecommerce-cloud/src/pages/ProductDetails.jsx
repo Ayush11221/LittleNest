@@ -567,7 +567,7 @@ function ProductDetails() {
           <div className="mt-8">
             <Button
               size="lg"
-              className="w-full sm:w-auto sm:min-w-64 justify-between gap-6"
+              className="w-full sm:w-auto sm:min-w-72 h-16 px-8 justify-between gap-6 text-base font-bold"
               disabled={!selectedVariant}
               onClick={handleAddToBag}
             >
